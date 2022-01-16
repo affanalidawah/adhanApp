@@ -8,6 +8,7 @@ import SettingsScreen from "./screens/SettingsScreen";
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  // This is where we can set the theme for the default background, the menu bar, the header bar, etc.
   const MyTheme = {
     dark: true,
     colors: {
@@ -23,12 +24,14 @@ export default function App() {
   return (
     <NavigationContainer theme={MyTheme}>
       <Tab.Navigator>
+        {/* Make the home screen */}
         <Tab.Screen
           name="Salah Timings"
           component={HomeScreen}
           options={{ headerShown: false }}
           // options={{ title: "Northside Islamic Center" }}
         />
+        {/* Make the settings screen */}
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
