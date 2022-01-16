@@ -6,45 +6,34 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import * as Font from "expo-font";
 
 const Iqamaat = (props) => {
+  // This is the setup for loading the custom fonts
+  // Variable set to true if fonts load succesfully
   const [isLoaded, setIsLoaded] = useState(false);
-  useEffect(() => {
-    loadAssetsAsync();
-  });
 
+  // These are the fonts we want to import
   async function loadAssetsAsync() {
     await Font.loadAsync({
       SFProDMedium: require("../assets/fonts/SF-Pro-Display-Medium.otf"),
     });
     setIsLoaded(true);
   }
-  if (!isLoaded) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.titleContainer}>
-          <FontAwesome5
-            name="pray"
-            size={19}
-            color="white"
-            style={styles.icon}
-          />
-          <Text style={styles.titleUnloaded}>{props.masjid} Iqama Timings</Text>
-        </View>
-        <View style={styles.iqamaat}>
-          <Iqamah name="Fajr" time={useImportData().Fajr} />
-          <Iqamah name="Dhuhr" time={useImportData().Dhuhr} />
-          <Iqamah name="Asr" time={useImportData().Asr} />
-          <Iqamah name="Maghrib" time={useImportData().MaghribAddition} />
-          <Iqamah name="Isha" time={useImportData().Isha} />
-        </View>
-      </View>
-    );
-  }
+
+  // Pulls in fonts on mount
+  useEffect(() => {
+    loadAssetsAsync();
+  });
+
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
+        {/* Icon of man praying next to the title */}
         <FontAwesome5 name="pray" size={19} color="white" style={styles.icon} />
-        <Text style={styles.title}>{props.masjid} Iqama Timings</Text>
+        {/* Display title of section */}
+        <Text style={isLoaded ? styles.title : styles.titleUnloaded}>
+          {props.masjid} Iqama Timings
+        </Text>
       </View>
+      {/* Use component "Iqamah" to generate name, checkmark, and timing of each Iqamah */}
       <View style={styles.iqamaat}>
         <Iqamah name="Fajr" time={useImportData().Fajr} />
         <Iqamah name="Dhuhr" time={useImportData().Dhuhr} />
@@ -83,6 +72,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "white",
     fontFamily: "SFProDMedium",
+  },
+  titleUnloaded: {
+    fontSize: 18,
+    color: "white",
   },
   iqamaat: {
     flex: 4,

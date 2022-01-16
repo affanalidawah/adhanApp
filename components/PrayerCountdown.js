@@ -5,7 +5,7 @@ import { useEffect, useState } from "react/cjs/react.development";
 import * as Font from "expo-font";
 import setUpAdhan from "../setUpAdhan";
 import logo from "../assets/logo.png";
-const moment = require("moment");
+// const moment = require("moment");
 const mtimezone = require("moment-timezone");
 
 function PrayerCountdown(props) {
@@ -25,10 +25,7 @@ function PrayerCountdown(props) {
   // Variable set to true if fonts load succesfully
   const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    loadAssetsAsync();
-  });
-
+  // These are the fonts we want to import
   async function loadAssetsAsync() {
     await Font.loadAsync({
       SFProDThin: require("../assets/fonts/SF-Pro-Display-Thin.otf"),
@@ -38,44 +35,40 @@ function PrayerCountdown(props) {
     setIsLoaded(true);
   }
 
-  // Checks if fonts loaded properly - if not, returns the screen without custom fonts
-  if (!isLoaded) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.masjidLogoContainer}>
-          <Image source={logo} style={styles.logo} />
-          {/* <Text style={styles.masjidName}>
-            Northside Islamic Center of San Antonio
-          </Text> */}
-        </View>
-        <View style={styles.salahNameContainer}>
-          <Text style={styles.salahNameUnloaded}>
-            {capitalizeFirstLetter(props.name)}
-          </Text>
-          <Text style={styles.iqamahUpdate}>Iqamah has passed</Text>
-        </View>
-        <View style={styles.salahCountdownContainer}>
-          <Text style={styles.salahCountdownUnloaded}>
-            {props.count} until {capitalizeFirstLetter(next)}
-          </Text>
-        </View>
-      </View>
-    );
-  }
-  // If fonts loaded, then return the screen with custom fonts
+  // Pulls in fonts on mount
+  useEffect(() => {
+    loadAssetsAsync();
+  });
+
   return (
     <View style={styles.container}>
+      {/* Display masjid logo */}
       <View style={styles.masjidLogoContainer}>
         <Image source={logo} style={styles.logo} />
       </View>
+      {/* Display name of current Salah */}
       <View style={styles.salahNameContainer}>
-        <Text style={styles.salahName}>
+        <Text style={isLoaded ? styles.salahName : styles.salahNameUnloaded}>
           {capitalizeFirstLetter(props.name)}
         </Text>
+        {/* Needs to be updated - should countdown to Iqamah
+          and then change to "Iqamah is ongoing" for five minutes after Iqamah time
+          and then changed to "Iqamah has passed" when the Iqamah has passed 
+          
+          The color should be yellow thirty minutes before
+          then red fifteen minutes before
+          and green when its ongoing
+          when it has passed it should be a translucent white*/}
         <Text style={styles.iqamahUpdate}>Iqamah has passed</Text>
       </View>
+      {/* Displays first the countdown until the current Iqamah,
+      and then when that passes it counts down until the next adhan time */}
       <View style={styles.salahCountdownContainer}>
-        <Text style={styles.salahCountdown}>
+        <Text
+          style={
+            isLoaded ? styles.salahCountdown : styles.salahCountdownUnloaded
+          }
+        >
           {props.count} until {capitalizeFirstLetter(next)}
         </Text>
       </View>
