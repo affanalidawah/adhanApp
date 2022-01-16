@@ -1,4 +1,3 @@
-import { PrayerTimes } from "adhan";
 import React, { Component } from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 import moment from "moment-timezone";
@@ -6,19 +5,25 @@ import { useEffect, useState } from "react/cjs/react.development";
 import * as Font from "expo-font";
 import setUpAdhan from "../setUpAdhan";
 import logo from "../assets/logo.png";
+const moment = require("moment");
+const mtimezone = require("moment-timezone");
 
 function PrayerCountdown(props) {
-  const [isLoaded, setIsLoaded] = useState(false);
-  let moment = require("moment");
-  let mtimezone = require("moment-timezone");
-  var adhan = require("adhan");
+  // Import Adhan Timings object and set up relevant timings
   var prayerTimes = setUpAdhan();
+  // returns name of current prayer, ex 'isha'
   var current = prayerTimes.currentPrayer();
   var next = prayerTimes.nextPrayer();
-
+  // Fetch the timing for the current prayer
   var timing = moment(prayerTimes[current])
     .tz("America/Chicago")
     .format("h:mm A");
+  // Seperates time (ex: 4:05) with AM/PM
+  timing = timing.split(" ")[0];
+
+  // This is the setup for loading the custom fonts
+  // Variable set to true if fonts load succesfully
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     loadAssetsAsync();
@@ -33,7 +38,7 @@ function PrayerCountdown(props) {
     setIsLoaded(true);
   }
 
-  timing = timing.split(" ")[0];
+  // Checks if fonts loaded properly - if not, returns the screen without custom fonts
   if (!isLoaded) {
     return (
       <View style={styles.container}>
@@ -57,6 +62,7 @@ function PrayerCountdown(props) {
       </View>
     );
   }
+  // If fonts loaded, then return the screen with custom fonts
   return (
     <View style={styles.container}>
       <View style={styles.masjidLogoContainer}>
@@ -77,6 +83,7 @@ function PrayerCountdown(props) {
   );
 }
 
+// Function to capitalize names of prayer times taken from Adhan object (isha -> Isha)
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
