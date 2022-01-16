@@ -2,12 +2,12 @@ import React, { Component, useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import * as Font from "expo-font";
 
-function PrayerLine(props) {
+function AdhanLine(props) {
+  // This is the setup for loading the custom fonts
+  // Variable set to true if fonts load succesfully
   const [isLoaded, setIsLoaded] = useState(false);
-  useEffect(() => {
-    loadAssetsAsync();
-  });
 
+  // These are the fonts we want to import
   async function loadAssetsAsync() {
     await Font.loadAsync({
       SFProDThin: require("../assets/fonts/SF-Pro-Display-Thin.otf"),
@@ -17,21 +17,31 @@ function PrayerLine(props) {
     });
     setIsLoaded(true);
   }
+  // Pulls in fonts on mount
+  useEffect(() => {
+    loadAssetsAsync();
+  });
 
+  // Fajr is special as we need to show both the Fajr timing and the sunrise timing on the same line
+  // We keep this condition here to render it differently
   if (props.salah === "Fajr") {
     return (
+      // Display Salah name
       <View style={[styles.container, props.style]}>
         <Text style={styles.textSalahName}> {props.salah} </Text>
+        {/* Display "Sunrise" and sunrise time  */}
         <View style={styles.midView}>
           <Text style={styles.midA}>Sunrise </Text>
           <Text style={styles.midB}>{props.sunrise}</Text>
         </View>
+        {/* Display Salah time */}
         <Text style={styles.textSalahTime}>{props.time}</Text>
       </View>
     );
   }
 
   return (
+    // Displau Salah name and time
     <View style={[styles.container, props.style]}>
       <Text style={styles.textSalahName}> {props.salah} </Text>
       <Text style={styles.textSalahTime}>{props.time}</Text>
@@ -39,7 +49,7 @@ function PrayerLine(props) {
   );
 }
 
-export default PrayerLine;
+export default AdhanLine;
 
 const styles = StyleSheet.create({
   container: {

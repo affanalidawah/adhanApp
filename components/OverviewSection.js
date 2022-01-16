@@ -8,7 +8,8 @@ import logo from "../assets/logo.png";
 // const moment = require("moment");
 const mtimezone = require("moment-timezone");
 
-function PrayerCountdown(props) {
+// This provides the masjid logo, the current Salah time, and the countdown for the next Iqamah/Salah
+function OverviewSection(props) {
   // Import Adhan Timings object and set up relevant timings
   var prayerTimes = setUpAdhan();
   // returns name of current prayer, ex 'isha'
@@ -81,7 +82,7 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export default PrayerCountdown;
+export default OverviewSection;
 
 const styles = StyleSheet.create({
   logo: {

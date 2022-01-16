@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Iqamah from "./Iqamah";
+import IqamahLine from "./IqamahLine";
 import useImportData from "../hooks/useImportData";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as Font from "expo-font";
 
-const Iqamaat = (props) => {
+const IqamaatSection = (props) => {
   // This is the setup for loading the custom fonts
   // Variable set to true if fonts load succesfully
   const [isLoaded, setIsLoaded] = useState(false);
@@ -28,24 +28,24 @@ const Iqamaat = (props) => {
       <View style={styles.titleContainer}>
         {/* Icon of man praying next to the title */}
         <FontAwesome5 name="pray" size={19} color="white" style={styles.icon} />
-        {/* Display title of section */}
+        {/* Display title of section. Use 'titleUnlaoded' if fonts didn't load properly*/}
         <Text style={isLoaded ? styles.title : styles.titleUnloaded}>
           {props.masjid} Iqama Timings
         </Text>
       </View>
       {/* Use component "Iqamah" to generate name, checkmark, and timing of each Iqamah */}
       <View style={styles.iqamaat}>
-        <Iqamah name="Fajr" time={useImportData().Fajr} />
-        <Iqamah name="Dhuhr" time={useImportData().Dhuhr} />
-        <Iqamah name="Asr" time={useImportData().Asr} />
-        <Iqamah name="Maghrib" time={useImportData().MaghribAddition} />
-        <Iqamah name="Isha" time={useImportData().Isha} />
+        <IqamahLine name="Fajr" time={useImportData().Fajr} />
+        <IqamahLine name="Dhuhr" time={useImportData().Dhuhr} />
+        <IqamahLine name="Asr" time={useImportData().Asr} />
+        <IqamahLine name="Maghrib" time={useImportData().MaghribAddition} />
+        <IqamahLine name="Isha" time={useImportData().Isha} />
       </View>
     </View>
   );
 };
 
-export default Iqamaat;
+export default IqamaatSection;
 
 const styles = StyleSheet.create({
   container: {

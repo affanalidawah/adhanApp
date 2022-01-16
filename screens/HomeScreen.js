@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet } from "react-native";
-import PrayerCountdown from "../components/PrayerCountdown";
-import Iqamaat from "../components/Iqamaat";
+import OverviewSection from "../components/OverviewSection";
+import IqamaatSection from "../components/IqamaatSection";
 import { LinearGradient } from "expo-linear-gradient";
 import setUpAdhan from "../setUpAdhan";
-import PrayerLineup from "../components/PrayerLineup";
+import AdhanaatSection from "../components/AdhanaatSection";
 const moment = require("moment");
 const adhan = require("adhan");
 
@@ -64,14 +64,14 @@ const HomeScreen = () => {
     >
       {/* Show the logo, the name of the current Salah, and the countdown at the top */}
       {current != "none" ? (
-        <PrayerCountdown name={current} count={countdown} />
+        <OverviewSection name={current} count={countdown} />
       ) : (
-        <PrayerCountdown name="Isha" count={countdown} />
+        <OverviewSection name="Isha" count={countdown} />
       )}
       {/* Show the Iqamah Timings box with names, checkmarks, and times */}
-      <Iqamaat masjid={name} />
+      <IqamaatSection masjid={name} />
       {/* Show the Adhan Timings box with all adhan timings and Jumuah time */}
-      <PrayerLineup />
+      <AdhanaatSection />
     </LinearGradient>
   );
 };

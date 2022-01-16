@@ -1,28 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import setUpAdhan from "../setUpAdhan";
-import PrayerLine from "./PrayerLine";
+import AdhanLine from "./AdhanLine";
 import moment from "moment-timezone";
 import { Ionicons } from "@expo/vector-icons";
 import useImportData from "../hooks/useImportData";
 import * as Font from "expo-font";
+const moment = require("moment");
+const mtimezone = require("moment-timezone");
 
-export default function PrayerLineup(props) {
+const AdhanaatSection = (props) => {
+  // This is the setup for loading the custom fonts
+  // Variable set to true if fonts load succesfully
   const [isLoaded, setIsLoaded] = useState(false);
-  useEffect(() => {
-    loadAssetsAsync();
-  });
 
+  // These are the fonts we want to import
   async function loadAssetsAsync() {
     await Font.loadAsync({
       SFProDMedium: require("../assets/fonts/SF-Pro-Display-Medium.otf"),
     });
     setIsLoaded(true);
   }
+  // Pulls in fonts on mount
+  useEffect(() => {
+    loadAssetsAsync();
+  });
 
-  let prayerTimes = setUpAdhan();
-  let moment = require("moment");
-  let mtimezone = require("moment-timezone");
+  // this is where we get the adhan TIMINGS so that we can send them to the AdhanLine component
+  const prayerTimes = setUpAdhan();
   let fajr = moment(prayerTimes.fajr).tz("America/Chicago").format("h:mm A");
   let sunrise = moment(prayerTimes.sunrise)
     .tz("America/Chicago")
@@ -35,56 +40,29 @@ export default function PrayerLineup(props) {
   let isha = moment(prayerTimes.isha).tz("America/Chicago").format("h:mm A");
   let jumuah = useImportData().Jumuah1;
 
-  if (!isLoaded) {
-    console.log("FAILS");
-    return (
-      <View style={styles.container}>
-        <View style={styles.titleContainer}>
-          <Ionicons
-            style={styles.sun}
-            name="md-sunny"
-            size={19}
-            color="white"
-          />
-          <Text style={styles.titleUnloaded}>NICSA Adhan Timings</Text>
-        </View>
-        <View style={styles.adhanaat}>
-          <PrayerLine salah="Fajr" time={fajr} sunrise={sunrise} />
-          <PrayerLine salah="Dhuhr" time={dhuhr} />
-          <PrayerLine salah="Asr" time={asr} />
-          <PrayerLine salah="Maghrib" time={maghrib} />
-          <PrayerLine
-            salah="Isha"
-            time={isha}
-            style={{ borderBottomWidth: 1 }}
-          />
-          <PrayerLine salah="Jumuah" time={jumuah} />
-        </View>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
+      {/* This shows the icon and title for the section */}
       <View style={styles.titleContainer}>
         <Ionicons style={styles.sun} name="md-sunny" size={19} color="white" />
-        <Text style={styles.title}>NICSA Adhan Timings</Text>
+        <Text style={isLoaded ? styles.title : styles.titleUnloaded}>
+          NICSA Adhan Timings
+        </Text>
       </View>
+      {/* This calls the AdhanLine component for each salah and provides it with the Salah name and time*/}
       <View style={styles.adhanaat}>
-        <PrayerLine salah="Fajr" time={fajr} sunrise={sunrise} />
-        <PrayerLine salah="Dhuhr" time={dhuhr} />
-        <PrayerLine salah="Asr" time={asr} />
-        <PrayerLine salah="Maghrib" time={maghrib} />
-        <PrayerLine
-          salah="Isha"
-          time={isha}
-          style={{ borderBottomColor: "rgba(255, 255, 255, 0.9)" }}
-        />
-        <PrayerLine salah="Jumuah" time={jumuah} />
+        <AdhanLine salah="Fajr" time={fajr} sunrise={sunrise} />
+        <AdhanLine salah="Dhuhr" time={dhuhr} />
+        <AdhanLine salah="Asr" time={asr} />
+        <AdhanLine salah="Maghrib" time={maghrib} />
+        <AdhanLine salah="Isha" time={isha} style={{ borderBottomWidth: 1 }} />
+        <AdhanLine salah="Jumuah" time={jumuah} />
       </View>
     </View>
   );
-}
+};
+
+export default AdhanaatSection;
 
 const styles = StyleSheet.create({
   container: {
