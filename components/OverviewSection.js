@@ -5,7 +5,6 @@ import { useEffect, useState } from "react/cjs/react.development";
 import * as Font from "expo-font";
 import setUpAdhan from "../setUpAdhan";
 import logo from "../assets/logo.png";
-// const moment = require("moment");
 const mtimezone = require("moment-timezone");
 
 // This provides the masjid logo, the current Salah time, and the countdown for the next Iqamah/Salah

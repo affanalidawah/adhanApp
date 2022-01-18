@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import setUpAdhan from "../setUpAdhan";
 import AdhanLine from "./AdhanLine";
-import moment from "moment-timezone";
 import { Ionicons } from "@expo/vector-icons";
 import useImportData from "../hooks/useImportData";
 import * as Font from "expo-font";
 const moment = require("moment");
-const mtimezone = require("moment-timezone");
 
 const AdhanaatSection = (props) => {
   // This is the setup for loading the custom fonts
