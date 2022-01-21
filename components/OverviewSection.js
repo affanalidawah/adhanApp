@@ -32,34 +32,21 @@ export default function OverviewSection(props) {
     loadAssetsAsync();
   }, []);
 
+  let countdown = props.count;
+
   return (
     <View style={styles.container}>
       {/* Display masjid logo */}
       <View style={styles.masjidLogoContainer}>
         <Image source={logo} style={styles.logo} />
       </View>
-      {/* Display name of current Salah */}
-      <View style={styles.salahNameContainer}>
+      <View style={styles.nameAndCountdownContainer}>
+        {/* Display name of current Salah */}
         <Text style={isLoaded ? styles.salahName : styles.salahNameUnloaded}>
           {props.name}
         </Text>
-        {/* Needs to be updated - should countdown to Iqamah
-          and then change to "Iqamah is ongoing" for five minutes after Iqamah time
-          and then changed to "Iqamah has passed" when the Iqamah has passed 
-          
-          The color should be yellow thirty minutes before
-          then red fifteen minutes before
-          and green when its ongoing
-          when it has passed it should be a translucent white*/}
-        <Text
-          style={isLoaded ? styles.iqamahUpdate : styles.iqamahUpdateUnloaded}
-        >
-          Iqamah has passed
-        </Text>
-      </View>
-      {/* Displays first the countdown until the current Iqamah,
+        {/* Displays first the countdown until the current Iqamah,
       and then when that passes it counts down until the next adhan time */}
-      <View style={styles.salahCountdownContainer}>
         <Text
           style={
             isLoaded ? styles.salahCountdown : styles.salahCountdownUnloaded
@@ -79,8 +66,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   container: {
-    flex: 35,
-    // backgroundColor: "white",
+    flex: 30,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -89,26 +75,12 @@ const styles = StyleSheet.create({
     marginTop: 45,
     alignItems: "center",
     justifyContent: "center",
-    // marginTop: 400,
-    // flexDirection: "row",
-    // flexWrap: "nowrap",
-    // backgroundColor: "green",
   },
-  // masjidName: {
-  //   color: "white",
-  //   fontSize: 15,
-  // },
-  salahNameContainer: {
-    flex: 10,
+  nameAndCountdownContainer: {
+    flex: 15,
+    // width: "100%",
+    // alignItems: "center",
     justifyContent: "center",
-    alignItems: "center",
-    // backgroundColor: "blue",
-  },
-  salahCountdownContainer: {
-    flex: 5,
-    justifyContent: "center",
-    alignItems: "center",
-    // backgroundColor: "black",
   },
   salahNameUnloaded: {
     color: "white",
@@ -125,8 +97,8 @@ const styles = StyleSheet.create({
   },
   salahName: {
     color: "white",
-    fontSize: 37,
-    fontFamily: "SFProDMedium",
+    fontSize: 40,
+    fontFamily: "SFProDThin",
     letterSpacing: -0.5,
     marginTop: 5,
   },

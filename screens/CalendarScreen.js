@@ -1,12 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import AgendaView from "../components/AgendaView";
 
 const CalendarScreen = () => {
-  return (
-    <View>
-      <Text></Text>
-    </View>
-  );
+  return <AgendaView />;
 };
 
 export default CalendarScreen;

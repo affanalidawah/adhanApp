@@ -94,6 +94,7 @@ export default function completeOrder() {
       }
       if (
         currentTime.isBefore(this.fajrAdhan) &&
+        currentTime.isAfter(this.prevMidnight) &&
         currentTime.isBefore(this.prevLastThird)
       ) {
         return this.prevLastThird;
