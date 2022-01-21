@@ -27,10 +27,10 @@ export default function IqamaatSection(props) {
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         {/* Icon of man praying next to the title */}
-        <FontAwesome5 name="pray" size={19} color="white" style={styles.icon} />
+        {/* <FontAwesome5 name="pray" size={19} color="white" style={styles.icon} /> */}
         {/* Display title of section. Use 'titleUnlaoded' if fonts didn't load properly*/}
         <Text style={isLoaded ? styles.title : styles.titleUnloaded}>
-          {props.masjid} Iqama Timings
+          Iqama Timings
         </Text>
       </View>
       {/* Use component "Iqamah" to generate name, checkmark, and timing of each Iqamah */}

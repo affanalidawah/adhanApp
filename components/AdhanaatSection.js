@@ -6,6 +6,8 @@ import { Ionicons } from "@expo/vector-icons";
 import useImportData from "../getImportData";
 import * as Font from "expo-font";
 const moment = require("moment");
+import completeOrder from "../completeOrder";
+import NightTimes from "./NightTimes";
 
 export default function AdhanaatSection(props) {
   // This is the setup for loading the custom fonts
@@ -16,6 +18,7 @@ export default function AdhanaatSection(props) {
   async function loadAssetsAsync() {
     await Font.loadAsync({
       SFProDMedium: require("../assets/fonts/SF-Pro-Display-Medium.otf"),
+      SFProDRegular: require("../assets/fonts/SF-Pro-Display-Regular.otf"),
     });
     setIsLoaded(true);
   }
@@ -26,6 +29,8 @@ export default function AdhanaatSection(props) {
 
   // this is where we get the adhan TIMINGS so that we can send them to the AdhanLine component
   const prayerTimes = setUpAdhan();
+  const order = completeOrder();
+  const currentName = order.currentName();
   let fajr = moment(prayerTimes.fajr).tz("America/Chicago").format("h:mm A");
   let sunrise = moment(prayerTimes.sunrise)
     .tz("America/Chicago")
@@ -37,6 +42,45 @@ export default function AdhanaatSection(props) {
     .format("h:mm A");
   let isha = moment(prayerTimes.isha).tz("America/Chicago").format("h:mm A");
   let jumuah = useImportData().Jumuah1;
+  let midnight = "";
+  let lastThird = "";
+
+  currentTime = moment();
+  if (
+    currentTime.isAfter(order.fajrAdhan) &&
+    currentTime.isBefore(order.curMidnight)
+  ) {
+    midnight = order.curMidnight;
+  }
+  if (currentTime.isAfter(order.ishaAdhan)) {
+    lastThird = order.curLastThird;
+  }
+  if (
+    currentTime.isAfter(order.curMidnight) &&
+    currentTime.isBefore(order.curLastThird)
+  ) {
+    lastThird = order.curLastThird;
+  }
+  if (currentTime.isAfter(order.fajrAdhan)) {
+    lastThird = order.curLastThird;
+  }
+  if (
+    currentTime.isBefore(order.fajrAdhan) &&
+    currentTime.isBefore(order.prevMidnight)
+  ) {
+    midnight = order.prevMidnight;
+  }
+  if (
+    currentTime.isBefore(order.fajrAdhan) &&
+    currentTime.isBefore(order.prevLastThird)
+  ) {
+    lastThird = order.prevLastThird;
+  }
+
+  midnight = moment(midnight).tz("America/Chicago").format("h:mm A");
+  lastThird = moment(lastThird).tz("America/Chicago").format("h:mm A");
+  // console.log(midnight);
+  // console.log(lastThird);
 
   return (
     <View style={styles.container}>
@@ -53,8 +97,37 @@ export default function AdhanaatSection(props) {
         <AdhanLine salah="Dhuhr" time={dhuhr} />
         <AdhanLine salah="Asr" time={asr} />
         <AdhanLine salah="Maghrib" time={maghrib} />
-        <AdhanLine salah="Isha" time={isha} style={{ borderBottomWidth: 1 }} />
-        <AdhanLine salah="Jumuah" time={jumuah} />
+        <AdhanLine
+          salah="Isha"
+          time={isha}
+          style={
+            currentName === "Isha"
+              ? { borderBottomWidth: 0 }
+              : currentName === "Midnight"
+              ? { borderBottomWidth: 0 }
+              : currentName === "Last Third"
+              ? { borderBottomWidth: 0 }
+              : {
+                  borderBottomWidth: 1,
+                  borderBottomColor: "rgba(255, 255, 255, .6)",
+                  // borderBottomWidth: "100%",
+                  // borderStyle: "dashed",
+                }
+          }
+        />
+
+        {/* <AdhanLine
+          salah="Jumuah"
+          time={jumuah}
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: "rgba(255, 255, 255, .6)",
+            // borderStyle: "dashed",
+          }}
+        /> */}
+
+        {/* Display midnight and last third times */}
+        <NightTimes midnight={midnight} lastThird={lastThird} />
       </View>
     </View>
   );

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import * as Font from "expo-font";
 import setUpAdhan from "../setUpAdhan";
 import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
+import completeOrder from "../completeOrder";
 
 export default function AdhanLine(props) {
   // This is the setup for loading the custom fonts
@@ -25,15 +26,8 @@ export default function AdhanLine(props) {
   }, []);
 
   // Find out what the current Salah is to highlight it
-  const prayerTimes = setUpAdhan();
-  const curAdhan = prayerTimes.currentPrayer();
-  const [currentPrayer, setCurrentPrayer] = useState(curAdhan);
-
-  useEffect(() => {
-    if (curAdhan === "none") {
-      setCurrentPrayer("isha");
-    }
-  }, [curAdhan]);
+  const order = completeOrder();
+  const currentName = order.currentName();
 
   // Fajr is special as we need to show both the Fajr timing and the sunrise timing on the same line
   // We keep this condition here to render it differently
@@ -42,7 +36,7 @@ export default function AdhanLine(props) {
       // Display Salah name
       <View
         style={
-          capitalizeFirstLetter(currentPrayer) === props.salah
+          currentName === props.salah
             ? [styles.containerCurrent, props.style]
             : [styles.container, props.style]
         }
@@ -76,7 +70,7 @@ export default function AdhanLine(props) {
     // Displau Salah name and time
     <View
       style={
-        capitalizeFirstLetter(currentPrayer) === props.salah
+        currentName === props.salah
           ? [styles.containerCurrent, props.style]
           : [styles.container, props.style]
       }
@@ -115,7 +109,7 @@ const styles = StyleSheet.create({
   containerCurrent: {
     flex: 1,
     flexDirection: "row",
-    width: "100%",
+    width: "95%",
     borderRadius: 7,
     backgroundColor: "rgba(255, 255, 255, .1)",
     borderBottomWidth: 1,

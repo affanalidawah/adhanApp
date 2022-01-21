@@ -15,7 +15,7 @@ export default function App() {
     dark: true,
     colors: {
       primary: "white",
-      background: "#292138",
+      background: "#3c3b5f",
       card: "#2A3040",
       text: "white",
       border: "#2A3040",

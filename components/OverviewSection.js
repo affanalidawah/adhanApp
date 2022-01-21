@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   container: {
-    flex: 30,
+    flex: 35,
     // backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
