@@ -6,23 +6,12 @@ import * as Font from "expo-font";
 import setUpAdhan from "../setUpAdhan";
 import logo from "../assets/logo.png";
 const mtimezone = require("moment-timezone");
+import completeOrder from "../completeOrder";
 
 // This provides the masjid logo, the current Salah time, and the countdown for the next Iqamah/Salah
-const OverviewSection = (props) => {
-  // Import Adhan Timings object and set up relevant timings
-  var prayerTimes = setUpAdhan();
-  // returns name of current prayer, ex 'isha'
-  var current = prayerTimes.currentPrayer();
-  var next = prayerTimes.nextPrayer();
-  if (next === "none") {
-    next = "Fajr";
-  }
-  // Fetch the timing for the current prayer
-  var timing = moment(prayerTimes[current])
-    .tz("America/Chicago")
-    .format("h:mm A");
-  // Seperates time (ex: 4:05) with AM/PM
-  timing = timing.split(" ")[0];
+export default function OverviewSection(props) {
+  order = completeOrder();
+  next = order.nextName();
 
   // This is the setup for loading the custom fonts
   // Variable set to true if fonts load succesfully
@@ -52,7 +41,7 @@ const OverviewSection = (props) => {
       {/* Display name of current Salah */}
       <View style={styles.salahNameContainer}>
         <Text style={isLoaded ? styles.salahName : styles.salahNameUnloaded}>
-          {capitalizeFirstLetter(props.name)}
+          {props.name}
         </Text>
         {/* Needs to be updated - should countdown to Iqamah
           and then change to "Iqamah is ongoing" for five minutes after Iqamah time
@@ -76,19 +65,12 @@ const OverviewSection = (props) => {
             isLoaded ? styles.salahCountdown : styles.salahCountdownUnloaded
           }
         >
-          {props.count} until {capitalizeFirstLetter(next)}
+          {props.count} until {next}
         </Text>
       </View>
     </View>
   );
-};
-
-// Function to capitalize names of prayer times taken from Adhan object (isha -> Isha)
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
 }
-
-export default OverviewSection;
 
 const styles = StyleSheet.create({
   logo: {

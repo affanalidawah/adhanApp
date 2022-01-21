@@ -1,10 +1,10 @@
-import { firebase } from "../firebase";
+import { firebase } from "./firebase";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 
-// This is used to grab the Iqamah and Jumuah timings for the Masjid
-const useImportData = () => {
+export default function getImportData() {
   const [iqamahTimings, setIqamahTimings] = useState("");
+  // let iqamahTimings = "";
 
   // Create database object and grab relevant document
   const db = getFirestore();
@@ -15,10 +15,9 @@ const useImportData = () => {
     const getDocument = async () => {
       const one = await getDoc(iqamahTimesLocation);
       setIqamahTimings(one.data());
+      // iqamahTimings = one.data();
     };
     getDocument();
   }, []);
   return iqamahTimings;
-};
-
-export default useImportData;
+}

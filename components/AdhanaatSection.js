@@ -3,11 +3,11 @@ import { StyleSheet, Text, View } from "react-native";
 import setUpAdhan from "../setUpAdhan";
 import AdhanLine from "./AdhanLine";
 import { Ionicons } from "@expo/vector-icons";
-import useImportData from "../hooks/useImportData";
+import useImportData from "../getImportData";
 import * as Font from "expo-font";
 const moment = require("moment");
 
-const AdhanaatSection = (props) => {
+export default function AdhanaatSection(props) {
   // This is the setup for loading the custom fonts
   // Variable set to true if fonts load succesfully
   const [isLoaded, setIsLoaded] = useState(false);
@@ -58,9 +58,7 @@ const AdhanaatSection = (props) => {
       </View>
     </View>
   );
-};
-
-export default AdhanaatSection;
+}
 
 const styles = StyleSheet.create({
   container: {

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import IqamahLine from "./IqamahLine";
-import useImportData from "../hooks/useImportData";
+import useImportData from "../getImportData";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as Font from "expo-font";
 
-const IqamaatSection = (props) => {
+export default function IqamaatSection(props) {
   // This is the setup for loading the custom fonts
   // Variable set to true if fonts load succesfully
   const [isLoaded, setIsLoaded] = useState(false);
@@ -43,9 +43,7 @@ const IqamaatSection = (props) => {
       </View>
     </View>
   );
-};
-
-export default IqamaatSection;
+}
 
 const styles = StyleSheet.create({
   container: {

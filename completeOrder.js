@@ -1,27 +1,30 @@
 import setUpAdhan from "./setUpAdhan";
-import useImportData from "./hooks/useImportData";
+import useImportData from "./getImportData";
 const moment = require("moment");
 
-const completeOrder = () => {
-  currentTime = moment();
+export default function completeOrder() {
+  const prayerTimes = setUpAdhan();
+  const mAdhan = prayerTimes.maghrib;
+  const addedMaghribMinutes = useImportData().MaghribAddition;
+  const currentTime = moment();
   const completeOrder = {
     fajrAdhan: prayerTimes.fajr,
-    fajrIqamah: useImportData.Fajr,
+    fajrIqamah: moment(useImportData().Fajr, "HH:mm A"),
     sunrise: prayerTimes.sunrise,
     dhuhrAdhan: prayerTimes.dhuhr,
-    dhuhrIqamah: useImportData.Dhuhr,
-    jumuahIqamah: useImportData.Jumuah1,
+    dhuhrIqamah: moment(useImportData().Dhuhr, "HH:mm A"),
+    jumuahIqamah: moment(useImportData().Jumuah1, "HH:mm A"),
     asrAdhan: prayerTimes.asr,
-    asrIqamah: useImportData.Asr,
+    asrIqamah: moment(useImportData().Asr, "HH:mm A"),
     maghribAdhan: prayerTimes.maghrib,
-    maghribIqamah: useImportData.Maghrib,
+    maghribIqamah: moment(mAdhan).add(addedMaghribMinutes, "m"),
     ishaAdhan: prayerTimes.isha,
-    ishaIqamah: useImportData.Isha,
+    ishaIqamah: moment(useImportData().Isha, "HH:mm A"),
     prevMidnight: prayerTimes.prevMidnight,
     prevLastThird: prayerTimes.prevLastThird,
     curMidnight: prayerTimes.curMidnight,
     curLastThird: prayerTimes.curLastThird,
-    nextFajr: prayerTimes.nextFajr,
+    nextFajr: prayerTimes.fajrNext,
     nextTiming: function () {
       if (currentTime.isBetween(this.fajrAdhan, this.fajrIqamah)) {
         return this.fajrIqamah;
@@ -71,9 +74,6 @@ const completeOrder = () => {
       if (currentTime.isBetween(this.ishaAdhan, this.ishaIqamah)) {
         return this.ishaIqamah;
       }
-      if (currentTime.isBetween(this.ishaAdhan, this.ishaIqamah)) {
-        return this.ishaIqamah;
-      }
       if (
         currentTime.isAfter(this.fajrAdhan) &&
         currentTime.isBefore(this.curMidnight)
@@ -101,8 +101,158 @@ const completeOrder = () => {
         return this.fajrAdhan;
       }
     },
+    nextName: function () {
+      if (currentTime.isBetween(this.fajrAdhan, this.fajrIqamah)) {
+        return "Fajr Iqamah";
+      }
+      if (currentTime.isBetween(this.fajrIqamah, this.sunrise)) {
+        return "Sunrise Time";
+      }
+      if (currentTime.isBetween(this.sunrise, this.dhuhrAdhan)) {
+        return "Dhuhr Adhan";
+      }
+      if (
+        currentTime.isBetween(this.dhuhrAdhan, this.jumuahIqamah) &&
+        currentTime.day() === 5
+      ) {
+        return "Jumuah Iqamah";
+      }
+      if (
+        currentTime.isBetween(this.dhuhrAdhan, this.dhuhrIqamah) &&
+        currentTime.day() != 5
+      ) {
+        return "Dhuhr Iqamah";
+      }
+      if (
+        currentTime.isBetween(this.dhuhrIqamah, this.asrAdhan) &&
+        currentTime.day() != 5
+      ) {
+        return "Asr Adhan";
+      }
+      if (
+        currentTime.isBetween(this.jumuahIqamah, this.asrAdhan) &&
+        currentTime.day() === 5
+      ) {
+        return "Asr Adhan";
+      }
+      if (currentTime.isBetween(this.asrAdhan, this.asrIqamah)) {
+        return "Asr Iqamah";
+      }
+      if (currentTime.isBetween(this.asrIqamah, this.maghribAdhan)) {
+        return "Maghrib Adhan";
+      }
+      if (currentTime.isBetween(this.maghribAdhan, this.maghribIqamah)) {
+        return "Maghrib Iqamah";
+      }
+      if (currentTime.isBetween(this.maghribIqamah, this.ishaAdhan)) {
+        return "Isha Adhan";
+      }
+      if (currentTime.isBetween(this.ishaAdhan, this.ishaIqamah)) {
+        return "Isha Iqamah";
+      }
+      if (
+        currentTime.isAfter(this.fajrAdhan) &&
+        currentTime.isBefore(this.curMidnight)
+      ) {
+        return "Midnight";
+      }
+      if (
+        currentTime.isAfter(this.curMidnight) &&
+        currentTime.isBefore(this.curLastThird)
+      ) {
+        return "Last Third";
+      }
+      if (
+        currentTime.isBefore(this.fajrAdhan) &&
+        currentTime.isBefore(this.prevMidnight)
+      ) {
+        return "Midnight";
+      }
+      if (
+        currentTime.isBefore(this.fajrAdhan) &&
+        currentTime.isBefore(this.prevLastThird)
+      ) {
+        return "Last Third";
+      } else {
+        return "Fajr Adhan";
+      }
+    },
+    currentName: function () {
+      if (currentTime.isBetween(this.fajrAdhan, this.fajrIqamah)) {
+        return "Fajr";
+      }
+      if (currentTime.isBetween(this.fajrIqamah, this.sunrise)) {
+        return "Fajr";
+      }
+      if (currentTime.isBetween(this.sunrise, this.dhuhrAdhan)) {
+        return "Duha";
+      }
+      if (
+        currentTime.isBetween(this.dhuhrAdhan, this.jumuahIqamah) &&
+        currentTime.day() === 5
+      ) {
+        return "Jumuah";
+      }
+      if (
+        currentTime.isBetween(this.dhuhrAdhan, this.dhuhrIqamah) &&
+        currentTime.day() != 5
+      ) {
+        return "Dhuhr";
+      }
+      if (
+        currentTime.isBetween(this.dhuhrIqamah, this.asrAdhan) &&
+        currentTime.day() != 5
+      ) {
+        return "Dhuhr";
+      }
+      if (
+        currentTime.isBetween(this.jumuahIqamah, this.asrAdhan) &&
+        currentTime.day() === 5
+      ) {
+        return "Jumuah";
+      }
+      if (currentTime.isBetween(this.asrAdhan, this.asrIqamah)) {
+        return "Asr";
+      }
+      if (currentTime.isBetween(this.asrIqamah, this.maghribAdhan)) {
+        return "Asr";
+      }
+      if (currentTime.isBetween(this.maghribAdhan, this.maghribIqamah)) {
+        return "Maghrib";
+      }
+      if (currentTime.isBetween(this.maghribIqamah, this.ishaAdhan)) {
+        return "Maghrib";
+      }
+      if (currentTime.isBetween(this.ishaAdhan, this.ishaIqamah)) {
+        return "Isha";
+      }
+      if (
+        currentTime.isAfter(this.fajrAdhan) &&
+        currentTime.isBefore(this.curMidnight)
+      ) {
+        return "Isha";
+      }
+      if (
+        currentTime.isAfter(this.curMidnight) &&
+        currentTime.isBefore(this.curLastThird)
+      ) {
+        return "Midnight";
+      }
+      if (
+        currentTime.isBefore(this.fajrAdhan) &&
+        currentTime.isBefore(this.prevMidnight)
+      ) {
+        return "Isha";
+      }
+      if (
+        currentTime.isBefore(this.fajrAdhan) &&
+        currentTime.isBefore(this.prevLastThird)
+      ) {
+        return "Midnight";
+      } else {
+        return "Last Third";
+      }
+    },
   };
   return completeOrder;
-};
-
-export default completeOrder;
+}

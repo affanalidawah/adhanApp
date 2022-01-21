@@ -6,7 +6,7 @@ import setUpAdhan from "../setUpAdhan";
 import * as Font from "expo-font";
 const mtimezone = require("moment-timezone");
 
-const IqamahLine = (props) => {
+export default function IqamahLine(props) {
   // This is the setup for loading the custom fonts
   // Variable set to true if fonts load succesfully
   const [isLoaded, setIsLoaded] = useState(false);
@@ -96,9 +96,7 @@ const IqamahLine = (props) => {
       </View>
     </View>
   );
-};
-
-export default IqamahLine;
+}
 
 const styles = StyleSheet.create({
   iqamah: {

@@ -4,7 +4,7 @@ import * as Font from "expo-font";
 import setUpAdhan from "../setUpAdhan";
 import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 
-const AdhanLine = (props) => {
+export default function AdhanLine(props) {
   // This is the setup for loading the custom fonts
   // Variable set to true if fonts load succesfully
   const [isLoaded, setIsLoaded] = useState(false);
@@ -94,9 +94,7 @@ const AdhanLine = (props) => {
       </Text>
     </View>
   );
-};
-
-export default AdhanLine;
+}
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);

@@ -4,7 +4,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import { useState } from "react/cjs/react.development";
 
-const Countdown = () => {
+export default function Countdown() {
   const prayerTimes = setUpAdhan();
   const curAdhan = prayerTimes.currentPrayer();
   let [nextPrayerTime, setNextPrayerTime] = useState(prayerTimes.nextPrayer());
@@ -38,6 +38,4 @@ const Countdown = () => {
       </Text>
     </View>
   );
-};
-
-export default Countdown;
+}
