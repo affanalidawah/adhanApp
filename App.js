@@ -4,6 +4,8 @@ import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./screens/HomeScreen";
 import SettingsScreen from "./screens/SettingsScreen";
+import CalendarScreen from "./screens/CalendarScreen";
+import AnnouncementsScreen from "./screens/AnnouncementsScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -32,6 +34,8 @@ export default function App() {
           // options={{ title: "Northside Islamic Center" }}
         />
         {/* Make the settings screen */}
+        <Tab.Screen name="Announcements" component={AnnouncementsScreen} />
+        <Tab.Screen name="Calendar" component={CalendarScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>

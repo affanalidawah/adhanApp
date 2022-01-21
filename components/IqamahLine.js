@@ -15,21 +15,19 @@ const IqamahLine = (props) => {
   async function loadAssetsAsync() {
     await Font.loadAsync({
       SFProDMedium: require("../assets/fonts/SF-Pro-Display-Medium.otf"),
+      SFProDRegular: require("../assets/fonts/SF-Pro-Display-Regular.otf"),
     });
     setIsLoaded(true);
   }
   // Pulls in fonts on mount
   useEffect(() => {
     loadAssetsAsync();
-  });
+  }, []);
 
   // This is where we import the Iqamah timings
   // Iqamah times are set by the masjid and are imported from the database
   // Get time from props
   let importedTime = props.time;
-
-  // Convert imported string to time format with Moment
-  let convertedTime = moment(importedTime, "HH:mm a");
 
   // Set up Maghrib Iqama
   // Maghrib Iqama is different from the others as usually it is a certain number of minutes after the Adhan
@@ -51,9 +49,13 @@ const IqamahLine = (props) => {
     isImported = true;
   }
 
+  // Convert imported string to time format with Moment
+  let convertedTime = "0:00";
+
   // Split imported time into time (ex: 4:30) and AM/PM
   let displayTimes = [];
   if (isImported) {
+    convertedTime = moment(importedTime, "HH:mm A");
     displayTimes = importedTime.split(" ");
   }
   return (
@@ -70,7 +72,7 @@ const IqamahLine = (props) => {
           <MaterialCommunityIcons
             name="checkbox-marked-circle"
             size={27}
-            color="green"
+            color="white"
           />
         ) : (
           <MaterialCommunityIcons

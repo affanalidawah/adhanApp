@@ -1,8 +1,10 @@
 import React, { Component, useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import * as Font from "expo-font";
+import setUpAdhan from "../setUpAdhan";
+import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 
-function AdhanLine(props) {
+const AdhanLine = (props) => {
   // This is the setup for loading the custom fonts
   // Variable set to true if fonts load succesfully
   const [isLoaded, setIsLoaded] = useState(false);
@@ -20,36 +22,85 @@ function AdhanLine(props) {
   // Pulls in fonts on mount
   useEffect(() => {
     loadAssetsAsync();
-  });
+  }, []);
+
+  // Find out what the current Salah is to highlight it
+  const prayerTimes = setUpAdhan();
+  const curAdhan = prayerTimes.currentPrayer();
+  const [currentPrayer, setCurrentPrayer] = useState(curAdhan);
+
+  useEffect(() => {
+    if (curAdhan === "none") {
+      setCurrentPrayer("isha");
+    }
+  }, [curAdhan]);
 
   // Fajr is special as we need to show both the Fajr timing and the sunrise timing on the same line
   // We keep this condition here to render it differently
   if (props.salah === "Fajr") {
     return (
       // Display Salah name
-      <View style={[styles.container, props.style]}>
-        <Text style={styles.textSalahName}> {props.salah} </Text>
+      <View
+        style={
+          capitalizeFirstLetter(currentPrayer) === props.salah
+            ? [styles.containerCurrent, props.style]
+            : [styles.container, props.style]
+        }
+      >
+        <Text
+          style={isLoaded ? styles.textSalahName : styles.textSalahNameUnloaded}
+        >
+          {" "}
+          {props.salah}{" "}
+        </Text>
         {/* Display "Sunrise" and sunrise time  */}
         <View style={styles.midView}>
-          <Text style={styles.midA}>Sunrise </Text>
-          <Text style={styles.midB}>{props.sunrise}</Text>
+          <Text style={isLoaded ? styles.midA : styles.midAUnloaded}>
+            Sunrise{" "}
+          </Text>
+          <Text style={isLoaded ? styles.midB : styles.midAUnloaded}>
+            {props.sunrise}
+          </Text>
         </View>
         {/* Display Salah time */}
-        <Text style={styles.textSalahTime}>{props.time}</Text>
+        <Text
+          style={isLoaded ? styles.textSalahTime : styles.textSalahTimeUnloaded}
+        >
+          {props.time}
+        </Text>
       </View>
     );
   }
 
   return (
     // Displau Salah name and time
-    <View style={[styles.container, props.style]}>
-      <Text style={styles.textSalahName}> {props.salah} </Text>
-      <Text style={styles.textSalahTime}>{props.time}</Text>
+    <View
+      style={
+        capitalizeFirstLetter(currentPrayer) === props.salah
+          ? [styles.containerCurrent, props.style]
+          : [styles.container, props.style]
+      }
+    >
+      <Text
+        style={isLoaded ? styles.textSalahName : styles.textSalahNameUnloaded}
+      >
+        {" "}
+        {props.salah}{" "}
+      </Text>
+      <Text
+        style={isLoaded ? styles.textSalahTime : styles.textSalahTimeUnloaded}
+      >
+        {props.time}
+      </Text>
     </View>
   );
-}
+};
 
 export default AdhanLine;
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -63,27 +114,56 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // flexWrap: "wrap",
   },
+  containerCurrent: {
+    flex: 1,
+    flexDirection: "row",
+    width: "100%",
+    borderRadius: 7,
+    backgroundColor: "rgba(255, 255, 255, .1)",
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255, 255, 255, 0.03)",
+    justifyContent: "space-around",
+    alignItems: "center",
+    // flexWrap: "wrap",
+  },
 
   textSalahName: {
     color: "white",
     fontWeight: "600",
     fontSize: 22,
-    fontFamily: "SFProDMedium",
+    fontFamily: "SFProDRegular",
   },
   textSalahTime: {
     color: "white",
     fontSize: 22,
-    fontFamily: "SFProDMedium",
+    fontFamily: "SFProDRegular",
   },
   midA: {
     fontSize: 14,
     color: "rgba(255, 255, 255, 0.7)",
-    fontFamily: "SFProDMedium",
+    fontFamily: "SFProDRegular",
   },
   midB: {
     fontSize: 22,
     color: "rgba(255, 255, 255, 0.7)",
-    fontFamily: "SFProDMedium",
+    fontFamily: "SFProDRegular",
+  },
+  textSalahNameUnloaded: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: 22,
+  },
+  textSalahTimeUnloaded: {
+    color: "white",
+    fontSize: 22,
+  },
+  midAUnloaded: {
+    fontSize: 14,
+    color: "rgba(255, 255, 255, 0.7)",
+  },
+  midBUnloaded: {
+    fontSize: 22,
+    color: "rgba(255, 255, 255, 0.7)",
   },
   midView: {
     alignItems: "center",

@@ -8,12 +8,15 @@ import logo from "../assets/logo.png";
 const mtimezone = require("moment-timezone");
 
 // This provides the masjid logo, the current Salah time, and the countdown for the next Iqamah/Salah
-function OverviewSection(props) {
+const OverviewSection = (props) => {
   // Import Adhan Timings object and set up relevant timings
   var prayerTimes = setUpAdhan();
   // returns name of current prayer, ex 'isha'
   var current = prayerTimes.currentPrayer();
   var next = prayerTimes.nextPrayer();
+  if (next === "none") {
+    next = "Fajr";
+  }
   // Fetch the timing for the current prayer
   var timing = moment(prayerTimes[current])
     .tz("America/Chicago")
@@ -38,7 +41,7 @@ function OverviewSection(props) {
   // Pulls in fonts on mount
   useEffect(() => {
     loadAssetsAsync();
-  });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -59,7 +62,11 @@ function OverviewSection(props) {
           then red fifteen minutes before
           and green when its ongoing
           when it has passed it should be a translucent white*/}
-        <Text style={styles.iqamahUpdate}>Iqamah has passed</Text>
+        <Text
+          style={isLoaded ? styles.iqamahUpdate : styles.iqamahUpdateUnloaded}
+        >
+          Iqamah has passed
+        </Text>
       </View>
       {/* Displays first the countdown until the current Iqamah,
       and then when that passes it counts down until the next adhan time */}
@@ -74,7 +81,7 @@ function OverviewSection(props) {
       </View>
     </View>
   );
-}
+};
 
 // Function to capitalize names of prayer times taken from Adhan object (isha -> Isha)
 function capitalizeFirstLetter(string) {
@@ -141,13 +148,6 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
     marginTop: 5,
   },
-  salahTime: {
-    color: "white",
-    fontSize: 102,
-    fontFamily: "SFProDThin",
-    letterSpacing: -0.5,
-    marginBottom: 1,
-  },
   salahCountdown: {
     color: "white",
     fontSize: 24,
@@ -160,5 +160,11 @@ const styles = StyleSheet.create({
     fontFamily: "SFProDThin",
     marginBottom: 5,
     // marginTop: 5,
+  },
+  iqamahUpdateUnloaded: {
+    color: "white",
+    fontSize: 20,
+    color: "rgba(255, 255, 255, 0.7)",
+    marginBottom: 5,
   },
 });

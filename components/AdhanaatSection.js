@@ -22,7 +22,7 @@ const AdhanaatSection = (props) => {
   // Pulls in fonts on mount
   useEffect(() => {
     loadAssetsAsync();
-  });
+  }, []);
 
   // this is where we get the adhan TIMINGS so that we can send them to the AdhanLine component
   const prayerTimes = setUpAdhan();
@@ -77,10 +77,11 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    width: "90%",
+    width: "100%",
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
+    // backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderBottomColor: "rgba(255, 255, 255, 0.03)",
     borderBottomWidth: 1,
   },

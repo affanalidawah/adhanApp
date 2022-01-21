@@ -21,7 +21,7 @@ const IqamaatSection = (props) => {
   // Pulls in fonts on mount
   useEffect(() => {
     loadAssetsAsync();
-  });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -61,9 +61,10 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    width: "90%",
+    width: "100%",
     alignItems: "center",
     justifyContent: "center",
+    // backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderBottomColor: "rgba(255, 255, 255, 0.03)",
     borderBottomWidth: 1,
     flexDirection: "row",
