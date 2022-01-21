@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import setUpAdhan from "../setUpAdhan";
 import * as Font from "expo-font";
 const mtimezone = require("moment-timezone");
+import HasIqamahPassed from "./HasIqamahPassed";
 
 export default function IqamahLine(props) {
   // This is the setup for loading the custom fonts
@@ -58,6 +59,10 @@ export default function IqamahLine(props) {
     convertedTime = moment(importedTime, "HH:mm A");
     displayTimes = importedTime.split(" ");
   }
+
+  // check which circle to use
+  let whichies = HasIqamahPassed();
+
   return (
     <View style={styles.iqamah}>
       {/* Display name of the Salah */}
@@ -68,7 +73,11 @@ export default function IqamahLine(props) {
       </View>
       {/* Display one of two checkmark images based on if the current time has passed the Iqamah time */}
       <View style={styles.checkmarkContainer}>
-        {moment().isSameOrAfter(convertedTime) ? (
+        {whichies === "yellow" ? (
+          <MaterialCommunityIcons name="bell-circle" size={27} color="yellow" />
+        ) : whichies === "green" ? (
+          <MaterialCommunityIcons name="play-circle" size={27} color="green" />
+        ) : moment().isSameOrAfter(convertedTime) ? (
           <MaterialCommunityIcons
             name="checkbox-marked-circle"
             size={27}

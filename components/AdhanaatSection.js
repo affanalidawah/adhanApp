@@ -45,35 +45,18 @@ export default function AdhanaatSection(props) {
   let midnight = "";
   let lastThird = "";
 
-  currentTime = moment();
-  if (
-    currentTime.isAfter(order.fajrAdhan) &&
-    currentTime.isBefore(order.curMidnight)
-  ) {
-    midnight = order.curMidnight;
-  }
+  let currentTime = moment();
+
   if (currentTime.isAfter(order.ishaAdhan)) {
+    midnight = order.curMidnight;
     lastThird = order.curLastThird;
   }
-  if (
-    currentTime.isAfter(order.curMidnight) &&
-    currentTime.isBefore(order.curLastThird)
-  ) {
+  if (currentTime.isSameOrAfter(order.fajrAdhan)) {
+    midnight = order.curMidnight;
     lastThird = order.curLastThird;
   }
-  if (currentTime.isAfter(order.fajrAdhan)) {
-    lastThird = order.curLastThird;
-  }
-  if (
-    currentTime.isBefore(order.fajrAdhan) &&
-    currentTime.isBefore(order.prevMidnight)
-  ) {
+  if (currentTime.isBefore(order.fajrAdhan)) {
     midnight = order.prevMidnight;
-  }
-  if (
-    currentTime.isBefore(order.fajrAdhan) &&
-    currentTime.isBefore(order.prevLastThird)
-  ) {
     lastThird = order.prevLastThird;
   }
 
@@ -81,6 +64,11 @@ export default function AdhanaatSection(props) {
   lastThird = moment(lastThird).tz("America/Chicago").format("h:mm A");
   // console.log(midnight);
   // console.log(lastThird);
+
+  let fajrPassed = currentTime.isAfter(order.sunrise);
+  let dhuhrPassed = currentTime.isAfter(order.asrAdhan);
+  let asrPassed = currentTime.isAfter(order.maghribAdhan);
+  let maghribPassed = currentTime.isAfter(order.ishaAdhan);
 
   return (
     <View style={styles.container}>
@@ -93,10 +81,15 @@ export default function AdhanaatSection(props) {
       </View>
       {/* This calls the AdhanLine component for each salah and provides it with the Salah name and time*/}
       <View style={styles.adhanaat}>
-        <AdhanLine salah="Fajr" time={fajr} sunrise={sunrise} />
-        <AdhanLine salah="Dhuhr" time={dhuhr} />
-        <AdhanLine salah="Asr" time={asr} />
-        <AdhanLine salah="Maghrib" time={maghrib} />
+        <AdhanLine
+          salah="Fajr"
+          time={fajr}
+          sunrise={sunrise}
+          passed={fajrPassed}
+        />
+        <AdhanLine salah="Dhuhr" time={dhuhr} passed={dhuhrPassed} />
+        <AdhanLine salah="Asr" time={asr} passed={asrPassed} />
+        <AdhanLine salah="Maghrib" time={maghrib} passed={maghribPassed} />
         <AdhanLine
           salah="Isha"
           time={isha}

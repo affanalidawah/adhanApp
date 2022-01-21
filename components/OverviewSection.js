@@ -33,13 +33,14 @@ export default function OverviewSection(props) {
   }, []);
 
   let countdown = props.count;
+  let countdownMinutes = moment.duration(countdown).asMinutes();
 
   return (
     <View style={styles.container}>
       {/* Display masjid logo */}
-      <View style={styles.masjidLogoContainer}>
+      {/* <View style={styles.masjidLogoContainer}>
         <Image source={logo} style={styles.logo} />
-      </View>
+      </View> */}
       <View style={styles.nameAndCountdownContainer}>
         {/* Display name of current Salah */}
         <Text style={isLoaded ? styles.salahName : styles.salahNameUnloaded}>
@@ -49,10 +50,20 @@ export default function OverviewSection(props) {
       and then when that passes it counts down until the next adhan time */}
         <Text
           style={
-            isLoaded ? styles.salahCountdown : styles.salahCountdownUnloaded
+            isLoaded && countdownMinutes < 20
+              ? [styles.salahCountdown, { color: "red" }]
+              : countdownMinutes < 20
+              ? styles.salahCountdownUnloaded
+              : isLoaded && countdownMinutes < 45
+              ? [styles.salahCountdown, { color: "yellow" }]
+              : countdownMinutes < 45
+              ? styles.salahCountdownUnloaded
+              : isLoaded
+              ? styles.salahCountdown
+              : styles.salahCountdownUnloaded
           }
         >
-          {props.count} until {next}
+          ~{props.count} until {next}
         </Text>
       </View>
     </View>
@@ -66,41 +77,44 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   container: {
-    flex: 30,
-    alignItems: "center",
+    flex: 20,
+    // width: "90%",
+    // alignItems: "flex-end",
     justifyContent: "center",
   },
-  masjidLogoContainer: {
-    flex: 15,
-    marginTop: 45,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  // masjidLogoContainer: {
+  //   flex: 15,
+  //   marginTop: 45,
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  // },
   nameAndCountdownContainer: {
-    flex: 15,
-    // width: "100%",
-    // alignItems: "center",
-    justifyContent: "center",
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    // backgroundColor: "black",
+    marginTop: 45,
+    justifyContent: "space-around",
   },
   salahNameUnloaded: {
     color: "white",
-    fontSize: 37,
+    fontSize: 75,
     fontWeight: "300",
     letterSpacing: -0.5,
     alignItems: "center",
   },
 
+  salahName: {
+    color: "white",
+    fontSize: 75,
+    fontFamily: "SFProDThin",
+    letterSpacing: -0.5,
+    marginTop: 5,
+  },
   salahCountdownUnloaded: {
     color: "white",
     fontSize: 24,
     fontWeight: "300",
-  },
-  salahName: {
-    color: "white",
-    fontSize: 40,
-    fontFamily: "SFProDThin",
-    letterSpacing: -0.5,
-    marginTop: 5,
   },
   salahCountdown: {
     color: "white",
