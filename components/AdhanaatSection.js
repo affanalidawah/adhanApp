@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
     width: "90%",
     marginBottom: 10,
     marginTop: 10,
+    // marginBottom: 20,
     // marginBottom: 10,
     borderRadius: 10,
   },

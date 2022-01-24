@@ -88,13 +88,25 @@ export default function AdhanLine(props) {
       }
     >
       <Text
-        style={isLoaded ? styles.textSalahName : styles.textSalahNameUnloaded}
+        style={
+          isLoaded && props.passed === true
+            ? [styles.textSalahName, { color: "rgba(255, 255, 255, 0.7)" }]
+            : isLoaded
+            ? styles.textSalahName
+            : styles.textSalahNameUnloaded
+        }
       >
         {" "}
         {props.salah}{" "}
       </Text>
       <Text
-        style={isLoaded ? styles.textSalahTime : styles.textSalahTimeUnloaded}
+        style={
+          isLoaded && props.passed === true
+            ? [styles.textSalahTime, { color: "rgba(255, 255, 255, 0.7)" }]
+            : isLoaded
+            ? styles.textSalahTime
+            : styles.textSalahTimeUnloaded
+        }
       >
         {props.time}
       </Text>

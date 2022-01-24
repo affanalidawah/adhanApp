@@ -75,7 +75,7 @@ export default function completeOrder() {
         return this.ishaIqamah;
       }
       if (
-        currentTime.isAfter(this.fajrAdhan) &&
+        currentTime.isAfter(this.ishaIqamah) &&
         currentTime.isBefore(this.curMidnight)
       ) {
         return this.curMidnight;
@@ -98,7 +98,11 @@ export default function completeOrder() {
         currentTime.isBefore(this.prevLastThird)
       ) {
         return this.prevLastThird;
-      } else {
+      }
+      if (
+        currentTime.isBefore(this.fajrAdhan) &&
+        currentTime.isAfter(this.prevLastThird)
+      ) {
         return this.fajrAdhan;
       }
     },
@@ -109,7 +113,19 @@ export default function completeOrder() {
       if (currentTime.isBetween(this.fajrIqamah, this.sunrise)) {
         return "Sunrise Time";
       }
-      if (currentTime.isBetween(this.sunrise, this.dhuhrAdhan)) {
+      // if (currentTime.isBetween(this.sunrise, this.dhuhrAdhan)) {
+      //   return "Dhuhr Adhan";
+      // }
+      if (
+        currentTime.isBetween(this.sunrise, this.dhuhrAdhan) &&
+        currentTime.day() === 5
+      ) {
+        return "Adhan";
+      }
+      if (
+        currentTime.isBetween(this.sunrise, this.dhuhrAdhan) &&
+        currentTime.day() != 5
+      ) {
         return "Dhuhr Adhan";
       }
       if (

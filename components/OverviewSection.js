@@ -33,37 +33,47 @@ export default function OverviewSection(props) {
   }, []);
 
   let countdown = props.count;
-  let countdownMinutes = moment.duration(countdown).asMinutes();
+  // For some reasons it is reading these as seconds instead of minutes....
+  let countdownMinutes = moment.duration(props.actualCount).asMinutes();
+  // console.log(countdownMinutes);
 
   return (
     <View style={styles.container}>
       {/* Display masjid logo */}
-      {/* <View style={styles.masjidLogoContainer}>
-        <Image source={logo} style={styles.logo} />
-      </View> */}
-      <View style={styles.nameAndCountdownContainer}>
-        {/* Display name of current Salah */}
-        <Text style={isLoaded ? styles.salahName : styles.salahNameUnloaded}>
-          {props.name}
-        </Text>
-        {/* Displays first the countdown until the current Iqamah,
+      <View style={styles.masjidLogoAndNameContainer}>
+        {/* <View style={styles.masjidLogoContainer}>
+          <Image source={logo} style={styles.logo} />
+        </View> */}
+        <View style={styles.nameContainer}>
+          {/* Display name of current Salah */}
+          <Text style={isLoaded ? styles.salahName : styles.salahNameUnloaded}>
+            {props.name}
+          </Text>
+        </View>
+      </View>
+      {/* Displays first the countdown until the current Iqamah,
       and then when that passes it counts down until the next adhan time */}
+      <View style={styles.countdownContainer}>
         <Text
           style={
-            isLoaded && countdownMinutes < 20
-              ? [styles.salahCountdown, { color: "red" }]
-              : countdownMinutes < 20
-              ? styles.salahCountdownUnloaded
+            isLoaded && countdownMinutes < 15
+              ? [styles.salahCountdown, { color: "#d82e3f" }]
+              : countdownMinutes < 15
+              ? [styles.salahCountdownUnloaded, { color: "#d82e3f" }]
+              : isLoaded && countdownMinutes < 30
+              ? [styles.salahCountdown, { color: "#ffe135" }]
+              : countdownMinutes < 30
+              ? [styles.salahCountdownUnloaded, { color: "#ffe135" }]
               : isLoaded && countdownMinutes < 45
-              ? [styles.salahCountdown, { color: "yellow" }]
+              ? [styles.salahCountdown, { color: "#fff44f" }]
               : countdownMinutes < 45
-              ? styles.salahCountdownUnloaded
+              ? [styles.salahCountdownUnloaded, { color: "#fff44f" }]
               : isLoaded
               ? styles.salahCountdown
               : styles.salahCountdownUnloaded
           }
         >
-          ~{props.count} until {next}
+          ~{countdown} until {next}
         </Text>
       </View>
     </View>
@@ -72,33 +82,45 @@ export default function OverviewSection(props) {
 
 const styles = StyleSheet.create({
   logo: {
-    width: 200,
-    height: 104,
+    width: 120,
+    height: 90,
     resizeMode: "contain",
+    // backgroundColor: "black",
   },
   container: {
-    flex: 20,
+    flex: 15,
+    marginTop: 43,
     // width: "90%",
     // alignItems: "flex-end",
-    justifyContent: "center",
+    // justifyContent: "center",
   },
-  // masjidLogoContainer: {
-  //   flex: 15,
-  //   marginTop: 45,
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  // },
-  nameAndCountdownContainer: {
-    flex: 1,
+  masjidLogoAndNameContainer: {
+    flex: 10,
     width: "100%",
     alignItems: "center",
-    // backgroundColor: "black",
-    marginTop: 45,
-    justifyContent: "space-around",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  nameContainer: {
+    flex: 1,
+    // width: "30%",
+    alignItems: "center",
+    // backgroundColor: "green",
+    justifyContent: "center",
+  },
+  masjidLogoContainer: {
+    alignItems: "flex-end",
+    // marginRight: 10,
+    justifyContent: "center",
+  },
+  countdownContainer: {
+    flex: 5,
+    alignItems: "center",
+    justifyContent: "center",
   },
   salahNameUnloaded: {
     color: "white",
-    fontSize: 75,
+    fontSize: 80,
     fontWeight: "300",
     letterSpacing: -0.5,
     alignItems: "center",
@@ -106,7 +128,7 @@ const styles = StyleSheet.create({
 
   salahName: {
     color: "white",
-    fontSize: 75,
+    fontSize: 70,
     fontFamily: "SFProDThin",
     letterSpacing: -0.5,
     marginTop: 5,

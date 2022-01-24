@@ -111,7 +111,7 @@ export default function HasIqamahPassed() {
       order.ishaAdhan
     )
   ) {
-    which = "yellow";
+    which = " ";
   }
   if (currentTime.isBetween(order.ishaAdhan, order.ishaIqamah)) {
     which = "yellow";

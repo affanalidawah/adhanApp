@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { NativeModules, StyleSheet, Text, View } from "react-native";
 import moment from "moment-timezone";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import setUpAdhan from "../setUpAdhan";
@@ -35,6 +35,11 @@ export default function IqamahLine(props) {
   // The masjid can choose how many minutes after Adhan their Iqamah will be, and this is imported as "addedMaghribMinutes"
   // This sets up the Adhan object
   let prayerTimes = setUpAdhan();
+  let current = capitalizeFirstLetter(prayerTimes.currentPrayer());
+  let isCurrentPrayer = false;
+  if (props.name === current) {
+    isCurrentPrayer = true;
+  }
   if (props.name === "Maghrib") {
     let addedMaghribMinutes = props.time;
     // Add "addedMaghribMinutes" to the Maghrib Adhan time
@@ -73,10 +78,18 @@ export default function IqamahLine(props) {
       </View>
       {/* Display one of two checkmark images based on if the current time has passed the Iqamah time */}
       <View style={styles.checkmarkContainer}>
-        {whichies === "yellow" ? (
-          <MaterialCommunityIcons name="bell-circle" size={27} color="yellow" />
-        ) : whichies === "green" ? (
-          <MaterialCommunityIcons name="play-circle" size={27} color="green" />
+        {whichies === "yellow" && isCurrentPrayer ? (
+          <MaterialCommunityIcons
+            name="bell-circle"
+            size={27}
+            color="#fff44f"
+          />
+        ) : whichies === "green" && isCurrentPrayer ? (
+          <MaterialCommunityIcons
+            name="play-circle"
+            size={27}
+            color="#28cc2d"
+          />
         ) : moment().isSameOrAfter(convertedTime) ? (
           <MaterialCommunityIcons
             name="checkbox-marked-circle"
@@ -105,6 +118,10 @@ export default function IqamahLine(props) {
       </View>
     </View>
   );
+}
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 const styles = StyleSheet.create({
