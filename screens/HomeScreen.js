@@ -5,7 +5,11 @@ import IqamaatSection from "../components/IqamaatSection";
 import { LinearGradient } from "expo-linear-gradient";
 import setUpAdhan from "../setUpAdhan";
 import AdhanaatSection from "../components/AdhanaatSection";
-const moment = require("moment");
+const dayjs = require("dayjs");
+var isBetween = require("dayjs/plugin/isBetween");
+dayjs.extend(isBetween);
+var utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
 const adhan = require("adhan");
 import completeOrder from "../completeOrder";
 
@@ -13,11 +17,11 @@ export default function HomeScreen() {
   // General variables for the Masjid
   const name = "NICSA";
   let order = completeOrder();
-  let nextTiming = moment(order.nextTiming());
+  let nextTiming = dayjs(order.nextTiming());
   // console.log(nextTiming);
   let currentName = order.currentName();
-  let currentTime = moment();
-  let curVal = moment.utc(nextTiming.diff(currentTime)).format("HH:mm:ss");
+  let currentTime = dayjs();
+  let curVal = dayjs.utc(nextTiming.diff(currentTime)).format("HH:mm:ss");
   let [countdown, setCountdown] = useState(
     curVal.substring(0, 4) === "00:0"
       ? curVal.substring(4)
@@ -29,15 +33,15 @@ export default function HomeScreen() {
   );
 
   // Setup to show {countdown} until {next prayer}
-  // console.log(moment.duration(countdown).minutes());
+  // console.log(dayjs.duration(countdown).minutes());
 
-  // console.log(moment.utc(nextTiming.diff(currentTime)).format("HH:mm:ss"));
+  // console.log(dayjs.utc(nextTiming.diff(currentTime)).format("HH:mm:ss"));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      nextTiming = moment(order.nextTiming());
-      currentTime = moment();
-      let curVal = moment.utc(nextTiming.diff(currentTime)).format("HH:mm:ss");
+      nextTiming = dayjs(order.nextTiming());
+      currentTime = dayjs();
+      curVal = dayjs.utc(nextTiming.diff(currentTime)).format("HH:mm:ss");
       // console.log(nextTiming);
       // console.log(currentTime);
       // console.log(curVal);
@@ -57,31 +61,51 @@ export default function HomeScreen() {
     // This allows for the background to be a gradient view
     currentName === "Fajr" ? (
       <LinearGradient colors={["#1b4467", "#090e25"]} style={styles.container}>
-        <OverviewSection name={currentName} count={countdown} />
+        <OverviewSection
+          name={currentName}
+          count={countdown}
+          countdown={curVal}
+        />
         <IqamaatSection masjid={name} />
         <AdhanaatSection />
       </LinearGradient>
     ) : currentName === "Duha" ? (
-      <LinearGradient colors={["#5f7cd0", "#1f4e7a"]} style={styles.container}>
-        <OverviewSection name={currentName} count={countdown} />
+      <LinearGradient colors={["#87d7ff", "#1f4e7a"]} style={styles.container}>
+        <OverviewSection
+          name={currentName}
+          count={countdown}
+          countdown={curVal}
+        />
         <IqamaatSection masjid={name} />
         <AdhanaatSection />
       </LinearGradient>
     ) : currentName === "Dhuhr" || currentName === "Jumuah" ? (
       <LinearGradient colors={["#659ca6", "#1f4e7a"]} style={styles.container}>
-        <OverviewSection name={currentName} count={countdown} />
+        <OverviewSection
+          name={currentName}
+          count={countdown}
+          countdown={curVal}
+        />
         <IqamaatSection masjid={name} />
         <AdhanaatSection />
       </LinearGradient>
     ) : currentName === "Asr" ? (
       <LinearGradient colors={["#60ade6", "#1f4e7a"]} style={styles.container}>
-        <OverviewSection name={currentName} count={countdown} />
+        <OverviewSection
+          name={currentName}
+          count={countdown}
+          countdown={curVal}
+        />
         <IqamaatSection masjid={name} />
         <AdhanaatSection />
       </LinearGradient>
     ) : currentName === "Maghrib" ? (
       <LinearGradient colors={["#97473a", "#1f4e7a"]} style={styles.container}>
-        <OverviewSection name={currentName} count={countdown} />
+        <OverviewSection
+          name={currentName}
+          count={countdown}
+          countdown={curVal}
+        />
         <IqamaatSection masjid={name} />
         <AdhanaatSection />
       </LinearGradient>
@@ -91,9 +115,7 @@ export default function HomeScreen() {
         <OverviewSection
           name={currentName}
           count={countdown}
-          actualCount={moment
-            .utc(nextTiming.diff(currentTime))
-            .format("HH:mm:ss")}
+          countdown={curVal}
         />
         {/* Show the Iqamah Timings box with names, checkmarks, and times */}
         <IqamaatSection masjid={name} />

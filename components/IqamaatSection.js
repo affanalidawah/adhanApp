@@ -4,7 +4,7 @@ import IqamahLine from "./IqamahLine";
 import useImportData from "../getImportData";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as Font from "expo-font";
-import moment from "moment-timezone";
+import dayjs from "dayjs";
 
 export default function IqamaatSection(props) {
   // This is the setup for loading the custom fonts
@@ -37,7 +37,7 @@ export default function IqamaatSection(props) {
       {/* Use component "Iqamah" to generate name, checkmark, and timing of each Iqamah */}
       <View style={styles.iqamaat}>
         <IqamahLine name="Fajr" time={useImportData().Fajr} />
-        {moment().day() === 5 ? (
+        {dayjs().day() === 5 ? (
           <IqamahLine name="Jumuah" time={useImportData().Jumuah1} />
         ) : (
           <IqamahLine name="Dhuhr" time={useImportData().Dhuhr} />

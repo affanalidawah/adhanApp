@@ -1,4 +1,6 @@
-const moment = require("moment");
+const dayjs = require("dayjs");
+var utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
 import setUpAdhan from "../setUpAdhan";
 import React from "react";
 import { View, Text } from "react-native";
@@ -15,7 +17,7 @@ export default function Countdown() {
     setNextPrayerTime(prayerTimes.nextPrayer());
   } else {
     setCurrentPrayer("isha");
-    moment().isBefore("12:00 AM")
+    dayjs().isBefore("12:00 AM")
       ? setNextPrayerTime(prayerTimes.nextFajr)
       : setNextPrayerTime(prayerTimes.Fajr);
   }
@@ -24,9 +26,7 @@ export default function Countdown() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCountdown(
-        moment.utc(nextPrayerTime.diff(moment())).format("HH:mm:ss")
-      );
+      setCountdown(dayjs.utc(nextPrayerTime.diff(dayjs())).format("HH:mm:ss"));
     }, 1000);
     return () => clearInterval(interval);
   }, []);

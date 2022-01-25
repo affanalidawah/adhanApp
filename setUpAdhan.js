@@ -1,5 +1,5 @@
 const adhan = require("adhan");
-const moment = require("moment");
+const dayjs = require("dayjs");
 
 const setUpAdhan = () => {
   // Location of Masjid
@@ -27,34 +27,34 @@ const setUpAdhan = () => {
 
   // Format all times
 
-  // prayerTimes.fajr = moment(prayerTimes.fajr)
+  // prayerTimes.fajr = dayjs(prayerTimes.fajr)
   //   .tz("America/Chicago")
   //   .format("h:mm A");
-  // prayerTimes.sunrise = moment(prayerTimes.sunrise)
+  // prayerTimes.sunrise = dayjs(prayerTimes.sunrise)
   //   .tz("America/Chicago")
   //   .format("h:mm A");
-  // prayerTimes.dhuhr = moment(prayerTimes.dhuhr)
+  // prayerTimes.dhuhr = dayjs(prayerTimes.dhuhr)
   //   .tz("America/Chicago")
   //   .format("h:mm A");
-  // prayerTimes.asr = moment(prayerTimes.asr)
+  // prayerTimes.asr = dayjs(prayerTimes.asr)
   //   .tz("America/Chicago")
   //   .format("h:mm A");
-  // prayerTimes.maghrib = moment(prayerTimes.maghrib)
+  // prayerTimes.maghrib = dayjs(prayerTimes.maghrib)
   //   .tz("America/Chicago")
   //   .format("h:mm A");
-  // prayerTimes.isha = moment(prayerTimes.isha)
+  // prayerTimes.isha = dayjs(prayerTimes.isha)
   //   .tz("America/Chicago")
   //   .format("h:mm A");
 
   // Adding lastThird and midnight values
   const sunnahTimes = new adhan.SunnahTimes(prayerTimes);
-  const midnight = moment(sunnahTimes.middleOfTheNight);
-  const lastThird = moment(sunnahTimes.lastThirdOfTheNight);
+  const midnight = dayjs(sunnahTimes.middleOfTheNight);
+  const lastThird = dayjs(sunnahTimes.lastThirdOfTheNight);
 
   // Adding lastThird and midnight values for yesterday
   const yesterdaySunnahTimes = new adhan.SunnahTimes(yesterdayPrayerTimes);
-  const prevMidnight = moment(yesterdaySunnahTimes.middleOfTheNight);
-  const prevLastThird = moment(yesterdaySunnahTimes.lastThirdOfTheNight);
+  const prevMidnight = dayjs(yesterdaySunnahTimes.middleOfTheNight);
+  const prevLastThird = dayjs(yesterdaySunnahTimes.lastThirdOfTheNight);
 
   // Grab value for the next day's Fajr time in new object
   const { fajr } = new adhan.PrayerTimes(coordinates, nextDay, params);

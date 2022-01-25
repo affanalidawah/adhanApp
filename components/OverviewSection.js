@@ -1,11 +1,18 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
-import moment from "moment-timezone";
+import dayjs from "dayjs";
+var duration = require("dayjs/plugin/duration");
+dayjs.extend(duration);
+var utc = require("dayjs/plugin/utc");
+var timezone = require("dayjs/plugin/timezone"); // dependent on utc plugin
+dayjs.extend(utc);
+dayjs.extend(timezone);
+var customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
 import { useEffect, useState } from "react/cjs/react.development";
 import * as Font from "expo-font";
 import setUpAdhan from "../setUpAdhan";
 import logo from "../assets/logo.png";
-const mtimezone = require("moment-timezone");
 import completeOrder from "../completeOrder";
 
 // This provides the masjid logo, the current Salah time, and the countdown for the next Iqamah/Salah
@@ -32,10 +39,25 @@ export default function OverviewSection(props) {
     loadAssetsAsync();
   }, []);
 
-  let countdown = props.count;
-  // For some reasons it is reading these as seconds instead of minutes....
-  let countdownMinutes = moment.duration(props.actualCount).asMinutes();
-  // console.log(countdownMinutes);
+  function changeColor() {
+    let countdown = props.countdown;
+    let firstTwo = countdown.substring(0, 2);
+    let secondTwo = parseInt(countdown.substring(3, 5));
+    if (firstTwo != "00") {
+      return "none";
+    }
+    if (secondTwo <= 15) {
+      return "red";
+    }
+    if (secondTwo <= 30) {
+      return "yellow";
+    }
+    if (secondTwo <= 45) {
+      return "orange";
+    }
+  }
+
+  let currentColor = changeColor();
 
   return (
     <View style={styles.container}>
@@ -56,24 +78,24 @@ export default function OverviewSection(props) {
       <View style={styles.countdownContainer}>
         <Text
           style={
-            isLoaded && countdownMinutes < 15
+            isLoaded && currentColor === "red"
               ? [styles.salahCountdown, { color: "#d82e3f" }]
-              : countdownMinutes < 15
+              : currentColor === "red"
               ? [styles.salahCountdownUnloaded, { color: "#d82e3f" }]
-              : isLoaded && countdownMinutes < 30
+              : isLoaded && currentColor === "orange"
               ? [styles.salahCountdown, { color: "#ffe135" }]
-              : countdownMinutes < 30
+              : currentColor === "orange"
               ? [styles.salahCountdownUnloaded, { color: "#ffe135" }]
-              : isLoaded && countdownMinutes < 45
+              : isLoaded && currentColor === "yellow"
               ? [styles.salahCountdown, { color: "#fff44f" }]
-              : countdownMinutes < 45
+              : currentColor === "yellow"
               ? [styles.salahCountdownUnloaded, { color: "#fff44f" }]
               : isLoaded
               ? styles.salahCountdown
               : styles.salahCountdownUnloaded
           }
         >
-          ~{countdown} until {next}
+          ~{props.count} until {next}
         </Text>
       </View>
     </View>

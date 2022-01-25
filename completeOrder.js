@@ -1,25 +1,27 @@
 import setUpAdhan from "./setUpAdhan";
 import useImportData from "./getImportData";
-const moment = require("moment");
+const dayjs = require("dayjs");
+var isBetween = require("dayjs/plugin/isBetween");
+dayjs.extend(isBetween);
 
 export default function completeOrder() {
   const prayerTimes = setUpAdhan();
   const mAdhan = prayerTimes.maghrib;
   const addedMaghribMinutes = useImportData().MaghribAddition;
-  const currentTime = moment();
+  const currentTime = dayjs();
   const completeOrder = {
     fajrAdhan: prayerTimes.fajr,
-    fajrIqamah: moment(useImportData().Fajr, "HH:mm A"),
+    fajrIqamah: dayjs(useImportData().Fajr, "HH:mm A"),
     sunrise: prayerTimes.sunrise,
     dhuhrAdhan: prayerTimes.dhuhr,
-    dhuhrIqamah: moment(useImportData().Dhuhr, "HH:mm A"),
-    jumuahIqamah: moment(useImportData().Jumuah1, "HH:mm A"),
+    dhuhrIqamah: dayjs(useImportData().Dhuhr, "HH:mm A"),
+    jumuahIqamah: dayjs(useImportData().Jumuah1, "HH:mm A"),
     asrAdhan: prayerTimes.asr,
-    asrIqamah: moment(useImportData().Asr, "HH:mm A"),
+    asrIqamah: dayjs(useImportData().Asr, "HH:mm A"),
     maghribAdhan: prayerTimes.maghrib,
-    maghribIqamah: moment(mAdhan).add(addedMaghribMinutes, "m"),
+    maghribIqamah: dayjs(mAdhan).add(addedMaghribMinutes, "m"),
     ishaAdhan: prayerTimes.isha,
-    ishaIqamah: moment(useImportData().Isha, "HH:mm A"),
+    ishaIqamah: dayjs(useImportData().Isha, "HH:mm A"),
     prevMidnight: prayerTimes.prevMidnight,
     prevLastThird: prayerTimes.prevLastThird,
     curMidnight: prayerTimes.curMidnight,
@@ -27,69 +29,101 @@ export default function completeOrder() {
     nextFajr: prayerTimes.fajrNext,
     nextTiming: function () {
       if (currentTime.isBetween(this.fajrAdhan, this.fajrIqamah)) {
+        console.log("Fajr Iqamah");
+        console.log(this.fajrAdhan);
+        console.log(this.fajrIqamah);
+
         return this.fajrIqamah;
       }
       if (currentTime.isBetween(this.fajrIqamah, this.sunrise)) {
+        console.log("Sunrise");
+
         return this.sunrise;
       }
       if (currentTime.isBetween(this.sunrise, this.dhuhrAdhan)) {
+        // console.log("dhuhrAdhan");
+
         return this.dhuhrAdhan;
       }
       if (
         currentTime.isBetween(this.dhuhrAdhan, this.jumuahIqamah) &&
         currentTime.day() === 5
       ) {
+        console.log("jumuahIqamah");
+
         return this.jumuahIqamah;
       }
       if (
         currentTime.isBetween(this.dhuhrAdhan, this.dhuhrIqamah) &&
         currentTime.day() != 5
       ) {
+        console.log("dhuhrIqamah");
+
         return this.dhuhrIqamah;
       }
       if (
         currentTime.isBetween(this.dhuhrIqamah, this.asrAdhan) &&
         currentTime.day() != 5
       ) {
+        console.log("asrAdhan");
+
         return this.asrAdhan;
       }
       if (
         currentTime.isBetween(this.jumuahIqamah, this.asrAdhan) &&
         currentTime.day() === 5
       ) {
+        console.log("asrAdhan");
+
         return this.asrAdhan;
       }
       if (currentTime.isBetween(this.asrAdhan, this.asrIqamah)) {
+        console.log("asrIqamah");
+
         return this.asrIqamah;
       }
       if (currentTime.isBetween(this.asrIqamah, this.maghribAdhan)) {
+        console.log("maghribAdhan");
+
         return this.maghribAdhan;
       }
       if (currentTime.isBetween(this.maghribAdhan, this.maghribIqamah)) {
+        console.log("maghribIqamah");
+
         return this.maghribIqamah;
       }
       if (currentTime.isBetween(this.maghribIqamah, this.ishaAdhan)) {
+        console.log("ishaAdhan");
+
         return this.ishaAdhan;
       }
       if (currentTime.isBetween(this.ishaAdhan, this.ishaIqamah)) {
+        console.log("ishaIqamah");
+
         return this.ishaIqamah;
       }
       if (
         currentTime.isAfter(this.ishaIqamah) &&
         currentTime.isBefore(this.curMidnight)
       ) {
+        console.log("curMidnight");
+
         return this.curMidnight;
       }
       if (
         currentTime.isAfter(this.curMidnight) &&
         currentTime.isBefore(this.curLastThird)
       ) {
+        console.log("curLastThird");
+
         return this.curLastThird;
       }
       if (
         currentTime.isBefore(this.fajrAdhan) &&
         currentTime.isBefore(this.prevMidnight)
       ) {
+        console.log("prevMidnight");
+
         return this.prevMidnight;
       }
       if (
@@ -97,12 +131,16 @@ export default function completeOrder() {
         currentTime.isAfter(this.prevMidnight) &&
         currentTime.isBefore(this.prevLastThird)
       ) {
+        // console.log("prevLastThird");
+
         return this.prevLastThird;
       }
       if (
         currentTime.isBefore(this.fajrAdhan) &&
         currentTime.isAfter(this.prevLastThird)
       ) {
+        console.log("fajrAdhan");
+
         return this.fajrAdhan;
       }
     },

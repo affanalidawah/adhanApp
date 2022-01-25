@@ -5,7 +5,13 @@ import AdhanLine from "./AdhanLine";
 import { Ionicons } from "@expo/vector-icons";
 import useImportData from "../getImportData";
 import * as Font from "expo-font";
-const moment = require("moment");
+const dayjs = require("dayjs");
+var isSameOrAfter = require("dayjs/plugin/isSameOrAfter");
+dayjs.extend(isSameOrAfter);
+var utc = require("dayjs/plugin/utc");
+var timezone = require("dayjs/plugin/timezone"); // dependent on utc plugin
+dayjs.extend(utc);
+dayjs.extend(timezone);
 import completeOrder from "../completeOrder";
 import NightTimes from "./NightTimes";
 
@@ -31,21 +37,21 @@ export default function AdhanaatSection(props) {
   const prayerTimes = setUpAdhan();
   const order = completeOrder();
   const currentName = order.currentName();
-  let fajr = moment(prayerTimes.fajr).tz("America/Chicago").format("h:mm A");
-  let sunrise = moment(prayerTimes.sunrise)
+  let fajr = dayjs(prayerTimes.fajr).tz("America/Chicago").format("h:mm A");
+  let sunrise = dayjs(prayerTimes.sunrise)
     .tz("America/Chicago")
     .format("h:mm A");
-  let dhuhr = moment(prayerTimes.dhuhr).tz("America/Chicago").format("h:mm A");
-  let asr = moment(prayerTimes.asr).tz("America/Chicago").format("h:mm A");
-  let maghrib = moment(prayerTimes.maghrib)
+  let dhuhr = dayjs(prayerTimes.dhuhr).tz("America/Chicago").format("h:mm A");
+  let asr = dayjs(prayerTimes.asr).tz("America/Chicago").format("h:mm A");
+  let maghrib = dayjs(prayerTimes.maghrib)
     .tz("America/Chicago")
     .format("h:mm A");
-  let isha = moment(prayerTimes.isha).tz("America/Chicago").format("h:mm A");
+  let isha = dayjs(prayerTimes.isha).tz("America/Chicago").format("h:mm A");
   let jumuah = useImportData().Jumuah1;
   let midnight = "";
   let lastThird = "";
 
-  let currentTime = moment();
+  let currentTime = dayjs();
 
   if (currentTime.isAfter(order.ishaAdhan)) {
     midnight = order.curMidnight;
@@ -60,8 +66,8 @@ export default function AdhanaatSection(props) {
     lastThird = order.prevLastThird;
   }
 
-  midnight = moment(midnight).tz("America/Chicago").format("h:mm A");
-  lastThird = moment(lastThird).tz("America/Chicago").format("h:mm A");
+  midnight = dayjs(midnight).tz("America/Chicago").format("h:mm A");
+  lastThird = dayjs(lastThird).tz("America/Chicago").format("h:mm A");
   // console.log(midnight);
   // console.log(lastThird);
 

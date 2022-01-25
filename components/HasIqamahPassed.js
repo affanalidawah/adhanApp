@@ -1,8 +1,10 @@
 import completeOrder from "../completeOrder";
-const moment = require("moment");
+const dayjs = require("dayjs");
+var isBetween = require("dayjs/plugin/isBetween");
+dayjs.extend(isBetween);
 
 export default function HasIqamahPassed() {
-  const currentTime = moment();
+  const currentTime = dayjs();
   const order = completeOrder();
   let which = " ";
   const salahLength = 5;
@@ -14,14 +16,14 @@ export default function HasIqamahPassed() {
   if (
     currentTime.isBetween(
       order.fajrIqamah,
-      moment(order.fajrIqamah).add(salahLength, "m")
+      dayjs(order.fajrIqamah).add(salahLength, "m")
     )
   ) {
     which = "green";
   }
   if (
     currentTime.isBetween(
-      moment(order.fajrIqamah).add(salahLength, "m"),
+      dayjs(order.fajrIqamah).add(salahLength, "m"),
       order.dhuhrAdhan
     )
   ) {
@@ -42,7 +44,7 @@ export default function HasIqamahPassed() {
   if (
     currentTime.isBetween(
       order.dhuhrIqamah,
-      moment(order.dhuhrIqamah).add(salahLength, "m")
+      dayjs(order.dhuhrIqamah).add(salahLength, "m")
     ) &&
     currentTime.day() != 5
   ) {
@@ -51,7 +53,7 @@ export default function HasIqamahPassed() {
   if (
     currentTime.isBetween(
       order.jumuahIqamah,
-      moment(order.dhuhrIqamah).add(jumuahLength, "m")
+      dayjs(order.dhuhrIqamah).add(jumuahLength, "m")
     ) &&
     currentTime.day() === 5
   ) {
@@ -59,7 +61,7 @@ export default function HasIqamahPassed() {
   }
   if (
     currentTime.isBetween(
-      moment(order.dhuhrIqamah).add(salahLength, "m"),
+      dayjs(order.dhuhrIqamah).add(salahLength, "m"),
       order.asrAdhan
     ) &&
     currentTime.day() != 5
@@ -68,7 +70,7 @@ export default function HasIqamahPassed() {
   }
   if (
     currentTime.isBetween(
-      moment(order.jumuahIqamah).add(jumuahLength, "m"),
+      dayjs(order.jumuahIqamah).add(jumuahLength, "m"),
       order.asrAdhan
     ) &&
     currentTime.day() === 5
@@ -81,14 +83,14 @@ export default function HasIqamahPassed() {
   if (
     currentTime.isBetween(
       order.asrIqamah,
-      moment(order.asrIqamah).add(salahLength, "m")
+      dayjs(order.asrIqamah).add(salahLength, "m")
     )
   ) {
     which = "green";
   }
   if (
     currentTime.isBetween(
-      moment(order.asrIqamah).add(salahLength, "m"),
+      dayjs(order.asrIqamah).add(salahLength, "m"),
       order.maghribAdhan
     )
   ) {
@@ -100,14 +102,14 @@ export default function HasIqamahPassed() {
   if (
     currentTime.isBetween(
       order.maghribIqamah,
-      moment(order.maghribIqamah).add(salahLength, "m")
+      dayjs(order.maghribIqamah).add(salahLength, "m")
     )
   ) {
     which = "green";
   }
   if (
     currentTime.isBetween(
-      moment(order.maghribIqamah).add(salahLength, "m"),
+      dayjs(order.maghribIqamah).add(salahLength, "m"),
       order.ishaAdhan
     )
   ) {
@@ -119,15 +121,15 @@ export default function HasIqamahPassed() {
   if (
     currentTime.isBetween(
       order.ishaIqamah,
-      moment(order.ishaIqamah).add(salahLength, "m")
+      dayjs(order.ishaIqamah).add(salahLength, "m")
     )
   ) {
     which = "green";
   }
-  if (currentTime.isAfter(moment(order.ishaIqamah).add(salahLength, "m"))) {
+  if (currentTime.isAfter(dayjs(order.ishaIqamah).add(salahLength, "m"))) {
     which = " ";
   }
-  if (currentTime.isBefore(moment(order.fajrAdhan))) {
+  if (currentTime.isBefore(dayjs(order.fajrAdhan))) {
     which = " ";
   }
 

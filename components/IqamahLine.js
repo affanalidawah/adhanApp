@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { NativeModules, StyleSheet, Text, View } from "react-native";
-import moment from "moment-timezone";
+import dayjs from "dayjs";
+var isSameOrAfter = require("dayjs/plugin/isSameOrAfter");
+dayjs.extend(isSameOrAfter);
+var utc = require("dayjs/plugin/utc");
+var timezone = require("dayjs/plugin/timezone"); // dependent on utc plugin
+dayjs.extend(utc);
+dayjs.extend(timezone);
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import setUpAdhan from "../setUpAdhan";
 import * as Font from "expo-font";
-const mtimezone = require("moment-timezone");
 import HasIqamahPassed from "./HasIqamahPassed";
 
 export default function IqamahLine(props) {
@@ -43,7 +48,7 @@ export default function IqamahLine(props) {
   if (props.name === "Maghrib") {
     let addedMaghribMinutes = props.time;
     // Add "addedMaghribMinutes" to the Maghrib Adhan time
-    importedTime = moment(prayerTimes.maghrib)
+    importedTime = dayjs(prayerTimes.maghrib)
       .add(addedMaghribMinutes, "m")
       .tz("America/Chicago")
       .format("h:mm A");
@@ -55,13 +60,13 @@ export default function IqamahLine(props) {
     isImported = true;
   }
 
-  // Convert imported string to time format with Moment
+  // Convert imported string to time format with dayjs
   let convertedTime = "0:00";
 
   // Split imported time into time (ex: 4:30) and AM/PM
   let displayTimes = [];
   if (isImported) {
-    convertedTime = moment(importedTime, "HH:mm A");
+    convertedTime = dayjs(importedTime, "HH:mm A");
     displayTimes = importedTime.split(" ");
   }
 
@@ -90,7 +95,7 @@ export default function IqamahLine(props) {
             size={27}
             color="#28cc2d"
           />
-        ) : moment().isSameOrAfter(convertedTime) ? (
+        ) : dayjs().isSameOrAfter(convertedTime) ? (
           <MaterialCommunityIcons
             name="checkbox-marked-circle"
             size={27}
