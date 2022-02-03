@@ -65,7 +65,7 @@ export default function completeOrder() {
         currentTime.isBetween(this.dhuhrIqamah, this.asrAdhan) &&
         currentTime.day() != 5
       ) {
-        console.log("asrAdhan");
+        // console.log("asrAdhan");
 
         return this.asrAdhan;
       }
@@ -83,7 +83,7 @@ export default function completeOrder() {
         return this.asrIqamah;
       }
       if (currentTime.isBetween(this.asrIqamah, this.maghribAdhan)) {
-        console.log("maghribAdhan");
+        // console.log("maghribAdhan");
 
         return this.maghribAdhan;
       }
@@ -93,7 +93,7 @@ export default function completeOrder() {
         return this.maghribIqamah;
       }
       if (currentTime.isBetween(this.maghribIqamah, this.ishaAdhan)) {
-        console.log("ishaAdhan");
+        // console.log("ishaAdhan");
 
         return this.ishaAdhan;
       }

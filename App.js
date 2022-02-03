@@ -5,7 +5,7 @@ import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeScreen from "./screens/HomeScreen";
-import SettingsScreen from "./screens/SettingsScreen";
+import MoreScreen from "./screens/MoreScreen";
 import CalendarScreen from "./screens/CalendarScreen";
 import AnnouncementsScreen from "./screens/AnnouncementsScreen";
 import logo from "./assets/logo.png";
@@ -44,7 +44,7 @@ export default function App() {
         />
         <Tab.Screen name="Announcements" component={AnnouncementsScreen} />
         <Tab.Screen name="Calendar" component={CalendarScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="More" component={MoreScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
