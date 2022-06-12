@@ -64,7 +64,6 @@ const AgendaView = () => {
         loadItemsForMonth={loadItems}
         selected={today}
         renderItem={renderItem}
-        // markedDates={ate}
       />
     </View>
   );

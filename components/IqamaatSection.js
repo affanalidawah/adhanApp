@@ -24,6 +24,10 @@ export default function IqamaatSection(props) {
     loadAssetsAsync();
   }, []);
 
+  const iqamahTimings = useImportData();
+  // console.log("iqamahTimings 2");
+  console.log(iqamahTimings);
+
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
@@ -36,16 +40,16 @@ export default function IqamaatSection(props) {
       </View>
       {/* Use component "Iqamah" to generate name, checkmark, and timing of each Iqamah */}
       <View style={styles.iqamaat}>
-        <IqamahLine name="Fajr" time={useImportData().Fajr} />
+        <IqamahLine name="Fajr" time="2:00 PM" />
         {dayjs().day() === 5 ? (
-          <IqamahLine name="Jumuah" time={useImportData().Jumuah1} />
+          <IqamahLine name="Jumuah" time="2:00 PM" />
         ) : (
-          <IqamahLine name="Dhuhr" time={useImportData().Dhuhr} />
+          <IqamahLine name="Dhuhr" time="2:00 PM" />
         )}
 
-        <IqamahLine name="Asr" time={useImportData().Asr} />
-        <IqamahLine name="Maghrib" time={useImportData().MaghribAddition} />
-        <IqamahLine name="Isha" time={useImportData().Isha} />
+        <IqamahLine name="Asr" time="2:00 PM" />
+        <IqamahLine name="Maghrib" time="2:00 PM" />
+        <IqamahLine name="Isha" time="2:00 PM" />
       </View>
     </View>
   );

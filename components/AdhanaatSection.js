@@ -47,7 +47,7 @@ export default function AdhanaatSection(props) {
     .tz("America/Chicago")
     .format("h:mm A");
   let isha = dayjs(prayerTimes.isha).tz("America/Chicago").format("h:mm A");
-  let jumuah = useImportData().Jumuah1;
+  let jumuah = "2:00 PM";
   let midnight = "";
   let lastThird = "";
 

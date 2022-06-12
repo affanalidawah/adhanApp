@@ -11,7 +11,6 @@ var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 import { useEffect, useState } from "react/cjs/react.development";
 import * as Font from "expo-font";
-import setUpAdhan from "../setUpAdhan";
 import logo from "../assets/logo.png";
 import completeOrder from "../completeOrder";
 
@@ -39,6 +38,26 @@ export default function OverviewSection(props) {
     loadAssetsAsync();
   }, []);
 
+  let [countdown, setCountdown] = useState("");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      let curVal = dayjs(order.nextTiming()).diff(dayjs(), "seconds");
+
+      curVal > 3600
+        ? setCountdown(
+            Math.floor(curVal / 3600) +
+              " hrs " +
+              Math.floor((curVal % 3600) / 60) +
+              " mins until "
+          )
+        : curVal > 60
+        ? setCountdown(Math.floor(curVal % 3600) + " mins until ")
+        : setCountdown(curVal + " secs until ");
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   function changeColor() {
     let countdown = props.countdown;
     let firstTwo = countdown.substring(0, 2);
@@ -57,7 +76,8 @@ export default function OverviewSection(props) {
     }
   }
 
-  let currentColor = changeColor();
+  // let currentColor = changeColor();
+  let currentColor = "";
 
   return (
     <View style={styles.container}>
@@ -95,7 +115,7 @@ export default function OverviewSection(props) {
               : styles.salahCountdownUnloaded
           }
         >
-          ~{props.count} until {next}
+          {countdown + next}
         </Text>
       </View>
     </View>

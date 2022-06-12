@@ -1,5 +1,5 @@
 import setUpAdhan from "./setUpAdhan";
-import useImportData from "./getImportData";
+import getImportData from "./getImportData";
 const dayjs = require("dayjs");
 var isBetween = require("dayjs/plugin/isBetween");
 dayjs.extend(isBetween);
@@ -7,21 +7,21 @@ dayjs.extend(isBetween);
 export default function completeOrder() {
   const prayerTimes = setUpAdhan();
   const mAdhan = prayerTimes.maghrib;
-  const addedMaghribMinutes = useImportData().MaghribAddition;
+  const addedMaghribMinutes = 5;
   const currentTime = dayjs();
   const completeOrder = {
     fajrAdhan: prayerTimes.fajr,
-    fajrIqamah: dayjs(useImportData().Fajr, "HH:mm A"),
+    fajrIqamah: dayjs("7:00 AM", "HH:mm A"),
     sunrise: prayerTimes.sunrise,
     dhuhrAdhan: prayerTimes.dhuhr,
-    dhuhrIqamah: dayjs(useImportData().Dhuhr, "HH:mm A"),
-    jumuahIqamah: dayjs(useImportData().Jumuah1, "HH:mm A"),
+    dhuhrIqamah: dayjs("2:00 PM", "HH:mm A"),
+    jumuahIqamah: dayjs("2:00 PM", "HH:mm A"),
     asrAdhan: prayerTimes.asr,
-    asrIqamah: dayjs(useImportData().Asr, "HH:mm A"),
+    asrIqamah: dayjs("5:30 PM", "HH:mm A"),
     maghribAdhan: prayerTimes.maghrib,
     maghribIqamah: dayjs(mAdhan).add(addedMaghribMinutes, "m"),
     ishaAdhan: prayerTimes.isha,
-    ishaIqamah: dayjs(useImportData().Isha, "HH:mm A"),
+    ishaIqamah: dayjs("9:00 PM", "HH:mm A"),
     prevMidnight: prayerTimes.prevMidnight,
     prevLastThird: prayerTimes.prevLastThird,
     curMidnight: prayerTimes.curMidnight,
@@ -29,9 +29,9 @@ export default function completeOrder() {
     nextFajr: prayerTimes.fajrNext,
     nextTiming: function () {
       if (currentTime.isBetween(this.fajrAdhan, this.fajrIqamah)) {
-        console.log("Fajr Iqamah");
-        console.log(this.fajrAdhan);
-        console.log(this.fajrIqamah);
+        // console.log("Fajr Iqamah");
+        // console.log(this.fajrAdhan);
+        // console.log(this.fajrIqamah);
 
         return this.fajrIqamah;
       }
@@ -106,7 +106,7 @@ export default function completeOrder() {
         currentTime.isAfter(this.ishaIqamah) &&
         currentTime.isBefore(this.curMidnight)
       ) {
-        console.log("curMidnight");
+        // console.log("curMidnight");
 
         return this.curMidnight;
       }
@@ -122,7 +122,7 @@ export default function completeOrder() {
         currentTime.isBefore(this.fajrAdhan) &&
         currentTime.isBefore(this.prevMidnight)
       ) {
-        console.log("prevMidnight");
+        // console.log("prevMidnight");
 
         return this.prevMidnight;
       }
